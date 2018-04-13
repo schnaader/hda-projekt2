@@ -117,10 +117,10 @@
 <l>smooth_funct_1d_gauss (Functionref, 2, SmoothedFunctionref)</l>
 <l>smooth_funct_1d_gauss (Functiondis, 2, SmoothedFunctiondis)</l>
 <c></c>
-<l>GenParamNames := ['grid']</l>
-<l>GenParamValues := ['true']</l>
+<l>GenParamNames := ['grid', 'grid_color','start_x','start_y','end_x','end_y']</l>
+<l>GenParamValues := ['true','pink',0,0,200,200]</l>
 <c></c>
-<l>plot_funct_1d (WindowHandle2, SmoothedFunctionref, [], [], 'red', [], [])</l>
+<l>plot_funct_1d (WindowHandle2, SmoothedFunctionref, [], [], 'red',GenParamNames, GenParamValues)</l>
 <l>plot_funct_1d (WindowHandle2, SmoothedFunctiondis, [], [], 'green',GenParamNames, GenParamValues)</l>
 <c></c>
 <c></c>
