@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.1" halcon_version="17.12">
+<hdevelop file_version="1.1" halcon_version="13.0.1.1">
 <procedure name="main">
 <interface/>
 <body>
+<l>* MIT License</l>
+<c></c>
+<c>* Copyright (c) 2018 Tobias Nixdorf</c>
+<c></c>
+<l>* Permission is hereby granted, free of charge, to any person obtaining a copy</l>
+<l>* of this software and associated documentation files (the "Software"), to deal</l>
+<l>* in the Software without restriction, including without limitation the rights</l>
+<l>* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</l>
+<l>* copies of the Software, and to permit persons to whom the Software is</l>
+<l>* furnished to do so, subject to the following conditions:</l>
+<c></c>
+<l>* The above copyright notice and this permission notice shall be included in all</l>
+<l>* copies or substantial portions of the Software.</l>
+<c></c>
+<l>* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</l>
+<l>* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</l>
+<l>* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</l>
+<l>* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</l>
+<l>* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</l>
+<l>* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</l>
+<l>* SOFTWARE.</l>
+<c></c>
+<c></c>
+<c></c>
+<c></c>
+<c></c>
+<c></c>
 <l>Height_Ref_Image:=1024</l>
 <l>Width_Ref_Image:=1024</l>
 <c></c>
@@ -37,59 +64,64 @@
 <l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[1,2,2]" as_ord="3">set_framegrabber_param (AcqHandle, 'ExposureTimeAbs', 32000.5)</l>
 <l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[1,2,2]" as_ord="6">set_framegrabber_param (AcqHandle, 'LineInverter', 0)</l>
 <l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[2,1]" as_ord="1">grab_image_start (AcqHandle, -1)</l>
+<c>    </c>
+<l>dev_set_window (WindowHandle2)</l>
 <l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[2,2]" as_ord="1">while (true)</l>
-<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[2,3]" as_ord="1">    grab_image_async (Image, AcqHandle, -1)</l>
-<l>    dev_set_window (WindowHandle2)</l>
-<l>    dev_display (Image)</l>
+<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[2,3]" as_ord="1">    grab_image_async (Imageref, AcqHandle, -1)</l>
+<c></c>
+<l>    dev_display (Imageref)</l>
 <l>endwhile</l>
-<l>    stop()</l>
-<l>    while (true)</l>
-<l>     grab_image_async (Image2, AcqHandle, -1)</l>
-<l>     dev_display (Image2)</l>
-<l>    endwhile</l>
-<c as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[2,4]" as_ord="1">    * Image Acquisition 02: Do something</c>
 <c></c>
 <c></c>
+<l>while (true)</l>
+<l>     grab_image_async (Imagedis, AcqHandle, -1)</l>
+<l>     dev_display (Imagedis)</l>
+<l>endwhile</l>
+<c as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[2,4]" as_ord="1"></c>
 <l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[4,1]" as_ord="1">close_framegrabber (AcqHandle)</l>
 <c></c>
-<l>median_image (Image2, ImageMedian2, 'circle', 10, 'mirrored')</l>
-<l>median_image (Image, ImageMedian, 'circle', 10, 'mirrored')</l>
-<l>dyn_threshold (Image2, ImageMedian2, RegionDynThresh2, 5, 'dark')</l>
-<l>dyn_threshold (Image, ImageMedian, RegionDynThresh, 5, 'dark')</l>
+<l>median_image (Imageref, ImageMedianref, 'circle', 10, 'mirrored')</l>
+<l>median_image (Imagedis, ImageMediandis, 'circle', 10, 'mirrored')</l>
+<l>dyn_threshold (Imageref, ImageMedianref, RegionDynThreshref, 5, 'dark')</l>
+<l>dyn_threshold (Imagedis, ImageMediandis, RegionDynThreshdis, 5, 'dark')</l>
 <c></c>
 <c></c>
-<l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
-<l>opening_circle (RegionDynThresh2, RegionOpening2, 3.5)</l>
+<l>opening_circle (RegionDynThreshref, RegionOpeningref, 3.5)</l>
+<l>opening_circle (RegionDynThreshdis, RegionOpeningdis, 3.5)</l>
 <c></c>
-<l>closing_circle (RegionOpening2, RegionClosing2, 15.5)</l>
-<l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
+<l>closing_circle (RegionOpeningref, RegionClosingref, 15.5)</l>
+<l>closing_circle (RegionOpeningdis, RegionClosingdis, 15.5)</l>
 <c></c>
-<l>connection (RegionClosing, ConnectedRegions0)</l>
-<l>connection (RegionClosing2, ConnectedRegions2)</l>
+<l>connection (RegionClosingref, ConnectedRegionsref)</l>
+<l>connection (RegionClosingdis, ConnectedRegionsdis)</l>
 <c></c>
 <c></c>
 <l>draw_region (Region, WindowHandle2)</l>
 <c></c>
-<l>intersection (Region, ConnectedRegions2, RegionIntersection2)</l>
-<l>intersection (Region, ConnectedRegions0, RegionIntersection)</l>
+<l>intersection (Region, ConnectedRegionsref, RegionIntersectionref)</l>
+<l>intersection (Region, ConnectedRegionsdis, RegionIntersectiondis)</l>
 <c></c>
-<l>connection (RegionIntersection, ConnectedRegions00)</l>
-<l>connection (RegionIntersection2, ConnectedRegions02)</l>
+<l>connection (RegionIntersectionref, ConnectedRegionsref)</l>
+<l>connection (RegionIntersectiondis, ConnectedRegionsdis)</l>
 <c></c>
-<l>region_features (ConnectedRegions02, 'row', row1)</l>
-<l>region_features (ConnectedRegions02, 'column', column1)</l>
+<l>region_features (ConnectedRegionsref, 'row', rowref)</l>
+<l>region_features (ConnectedRegionsref, 'column', columnref)</l>
 <c></c>
-<l>region_features (ConnectedRegions00, 'row', row2)</l>
-<l>region_features (ConnectedRegions00, 'column', column2)</l>
+<l>region_features (ConnectedRegionsdis, 'row', rowdis)</l>
+<l>region_features (ConnectedRegionsdis, 'column', columndis)</l>
 <c></c>
-<l>distance_pp (row1, column1, row2, column2, Distance)</l>
-<l>create_funct_1d_array (row1-row2, Function)</l>
-<l>create_funct_1d_array (column1-column2, Function2)</l>
+<l>distance_pp (rowref, columnref, rowdis, columndis, Distance)</l>
+<l>create_funct_1d_array (rowref-rowdis, Functionref)</l>
+<l>create_funct_1d_array (columnref-columndis, Functiondis)</l>
 <c></c>
-<l>smooth_funct_1d_gauss (Function2, 2, SmoothedFunction2)</l>
-<l>smooth_funct_1d_gauss (Function, 2, SmoothedFunction)</l>
-<l>plot_funct_1d (WindowHandle2, SmoothedFunction, [], [], [], [], [])</l>
-<l>plot_funct_1d (WindowHandle2, SmoothedFunction2, [], [], [], [], [])</l>
+<l>smooth_funct_1d_gauss (Functionref, 2, SmoothedFunctionref)</l>
+<l>smooth_funct_1d_gauss (Functiondis, 2, SmoothedFunctiondis)</l>
+<c></c>
+<l>GenParamNames := ['grid']</l>
+<l>GenParamValues := ['true']</l>
+<c></c>
+<l>plot_funct_1d (WindowHandle2, SmoothedFunctionref, [], [], 'red', [], [])</l>
+<l>plot_funct_1d (WindowHandle2, SmoothedFunctiondis, [], [], 'green',GenParamNames, GenParamValues)</l>
 <c></c>
 <c></c>
 <c></c>
