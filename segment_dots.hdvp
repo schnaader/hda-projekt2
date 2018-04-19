@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="13.0.1.1">
+<procedure name="segment_dots">
+<interface>
+<io>
+<par name="image_in" base_type="iconic" dimension="0"/>
+<par name="Regiontosement" base_type="iconic" dimension="0"/>
+</io>
+<oo>
+<par name="RegionIntersection" base_type="iconic" dimension="0"/>
+</oo>
+<oc>
+<par name="row_out" base_type="ctrl" dimension="0"/>
+<par name="column_out" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c></c>
+<l>median_image (image_in, ImageMedian, 'circle', 10, 'mirrored')</l>
+<l>dyn_threshold (image_in, ImageMedian, RegionDynThresh, 5, 'dark')</l>
+<l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
+<l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
+<l>connection (RegionClosing, ConnectedRegions)</l>
+<l>intersection (Regiontosement, ConnectedRegions, RegionIntersection)</l>
+<l>connection (RegionIntersection, ConnectedRegions)</l>
+<l>region_features (ConnectedRegions, 'row', row_out)</l>
+<l>region_features (ConnectedRegions, 'column', column_out)</l>
+<l>return ()</l>
+</body>
+<docu id="segment_dots">
+<parameters>
+<parameter id="RegionIntersection"/>
+<parameter id="Regiontosement"/>
+<parameter id="column_out"/>
+<parameter id="image_in"/>
+<parameter id="row_out"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

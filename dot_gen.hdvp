@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="13.0.1.1">
+<procedure name="dot_gen">
+<interface>
+<oo>
+<par name="ResultImages" base_type="iconic" dimension="0"/>
+<par name="ImageResult2" base_type="iconic" dimension="0"/>
+</oo>
+<ic>
+<par name="Width_Ref_Image" base_type="ctrl" dimension="0"/>
+<par name="Height_Ref_Image" base_type="ctrl" dimension="0"/>
+<par name="back_brightness" base_type="ctrl" dimension="0"/>
+<par name="spacing_x" base_type="ctrl" dimension="0"/>
+<par name="spacing_y" base_type="ctrl" dimension="0"/>
+<par name="dot_Radius" base_type="ctrl" dimension="0"/>
+<par name="dot_brightness" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<l>dev_close_window ()</l>
+<l>dev_open_window_fit_size (0, 0, Width_Ref_Image, Width_Ref_Image, -1, -1, WindowHandle)</l>
+<l>dev_update_off ()</l>
+<l>gen_image_const (Image, 'byte', Width_Ref_Image, Height_Ref_Image)</l>
+<l>paint_region (Image, Image, ImageResult, back_brightness, 'fill')</l>
+<c></c>
+<l>gen_empty_obj (ResultImages)</l>
+<l>gen_empty_obj (ResultRegions)</l>
+<l>for Index := spacing_x to Width_Ref_Image by spacing_x</l>
+<l>    for Index1 := spacing_y to Height_Ref_Image by spacing_y   </l>
+<l>        gen_circle (Circle, Index, Index1, dot_Radius)</l>
+<l>        paint_region (Circle, ImageResult, ImageResult1, dot_brightness, 'fill') </l>
+<l>        concat_obj (ResultImages, ImageResult1, ResultImages)</l>
+<l>        concat_obj (ResultRegions, Circle, ResultRegions)</l>
+<c>        </c>
+<l>    endfor</l>
+<l>endfor</l>
+<c></c>
+<l>paint_region (ResultRegions, ImageResult, ImageResult2, dot_brightness, 'fill') </l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="dot_gen">
+<parameters>
+<parameter id="Height_Ref_Image"/>
+<parameter id="ImageResult2"/>
+<parameter id="ResultImages"/>
+<parameter id="Width_Ref_Image"/>
+<parameter id="back_brightness"/>
+<parameter id="dot_Radius"/>
+<parameter id="dot_brightness"/>
+<parameter id="spacing_x"/>
+<parameter id="spacing_y"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>
