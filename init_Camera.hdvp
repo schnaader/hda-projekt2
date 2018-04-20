@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.1" halcon_version="13.0.1.1">
+<procedure name="init_Camera">
+<interface>
+<oc>
+<par name="AcqHandle" base_type="ctrl" dimension="0"/>
+<par name="Exception" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>try</l>
+<l>    open_framegrabber ('GigEVision2', 0, 0, 0, 0, 0, 0, 'progressive', -1, 'default', -1, 'false', 'default', 'USER_ID', 0, -1, AcqHandle)    </l>
+<l>catch (Exception)</l>
+<l>    try</l>
+<l>         grab_image(ImageTemp, AcqHandle)   </l>
+<l>    catch (Exception)</l>
+<l>       try</l>
+<l>           close_framegrabber (AcqHandle)</l>
+<l>           open_framegrabber ('GigEVision2', 0, 0, 0, 0, 0, 0, 'progressive', -1, 'default', -1, 'false', 'default', 'USER_ID', 0, -1, AcqHandle)    </l>
+<c> </c>
+<l>       catch (Exception)</l>
+<l>           dev_disp_text ('Something went wrong no framegrabber present?', 'window', 'top', 'left', 'black', [], [])</l>
+<l>            stop()</l>
+<l>       endtry</l>
+<l>           endtry</l>
+<l>endtry</l>
+<c></c>
+<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[1,2,2]" as_ord="1">set_framegrabber_param (AcqHandle, 'TriggerMode', 'Off')</l>
+<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[1,2,2]" as_ord="3">set_framegrabber_param (AcqHandle, 'ExposureTimeAbs', 32000.5)</l>
+<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[1,2,2]" as_ord="6">set_framegrabber_param (AcqHandle, 'LineInverter', 0)</l>
+<c></c>
+<c>    </c>
+<l>return ()</l>
+</body>
+<docu id="init_Camera">
+<parameters>
+<parameter id="AcqHandle"/>
+<parameter id="Exception"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

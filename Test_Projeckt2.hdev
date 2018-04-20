@@ -50,13 +50,8 @@
 <l>dev_set_window (WindowHandle)</l>
 <l>dev_display (ImageResult2)</l>
 <c></c>
-<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[1,2,1]" as_ord="1">open_framegrabber ('GigEVision2', 0, 0, 0, 0, 0, 0, 'progressive', -1, 'default', -1, 'false', 'default', 'USER_ID', 0, -1, AcqHandle)</l>
+<l>init_Camera (AcqHandle, Exception)</l>
 <c></c>
-<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[1,2,2]" as_ord="1">set_framegrabber_param (AcqHandle, 'TriggerMode', 'Off')</l>
-<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[1,2,2]" as_ord="3">set_framegrabber_param (AcqHandle, 'ExposureTimeAbs', 32000.5)</l>
-<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[1,2,2]" as_ord="6">set_framegrabber_param (AcqHandle, 'LineInverter', 0)</l>
-<c></c>
-<c>    </c>
 <l>dev_set_window (WindowHandle2)</l>
 <l>    grab_image(ImageRef, AcqHandle)</l>
 <l>    dev_display (ImageRef)</l>
@@ -65,27 +60,17 @@
 <l>    while (wait_live)</l>
 <l>         grab_image(ImageTemp, AcqHandle) </l>
 <l>         dev_display (ImageTemp)</l>
-<l>         dev_disp_text ('Insert object n/ and click left mouse button', 'window', 'top', 'left', 'black', [], [])    </l>
+<l>         dev_disp_text ('Insert object and click left mouse button', 'window', 'top', 'left', 'black', [], [])    </l>
 <l>         get_mbutton (WindowHandle2, Row, Column, Button)</l>
 <l>         if (Button=1)</l>
 <l>            wait_live:=1 </l>
 <l>             ImageChanged:=ImageTemp</l>
 <l>         endif </l>
 <l>    endwhile</l>
-<c as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[2,4]" as_ord="1"></c>
-<l as_id="image_acquisition" as_name="Image Acquisition 02" as_grp="[4,1]" as_ord="1">close_framegrabber (AcqHandle)</l>
-<c></c>
-<c></c>
-<c></c>
 <l>draw_region (Region, WindowHandle2)</l>
 <c></c>
 <l>segment_dots (ImageRef, Region, RegionIntersectionref, rowRef, columnRef)</l>
 <l>segment_dots (ImageChanged, Region, RegionIntersectionChanged, rowChanged, columnChanged)</l>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
 <c></c>
 <c></c>
 <c></c>
@@ -101,11 +86,6 @@
 <c></c>
 <l>plot_funct_1d (WindowHandle2, SmoothedFunctionRef, [], [], 'red',GenParamNames, GenParamValues)</l>
 <l>plot_funct_1d (WindowHandle2, SmoothedFunctionChanged, [], [], 'green',GenParamNames, GenParamValues)</l>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
 <c></c>
 <l>dev_display (ImageRef)</l>
 <c></c>
