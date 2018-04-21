@@ -17,7 +17,7 @@
 <body>
 <c></c>
 <l>median_image (image_in, ImageMedian, 'circle', 10, 'mirrored')</l>
-<l>dyn_threshold (image_in, ImageMedian, RegionDynThresh, 5, 'dark')</l>
+<l>dyn_threshold (image_in, ImageMedian, RegionDynThresh, 30, 'dark')</l>
 <l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
 <l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
 <l>connection (RegionClosing, ConnectedRegions)</l>

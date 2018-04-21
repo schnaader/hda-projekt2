@@ -50,44 +50,70 @@
 <l>dev_set_window (WindowHandle)</l>
 <l>dev_display (ImageResult2)</l>
 <c></c>
-<l>init_Camera (AcqHandle, Exception)</l>
+<c></c>
+<l>Live:=0</l>
+<l>if(Live)</l>
+<l>    init_Camera (AcqHandle, Exception)</l>
+<l>endif</l>
+<c></c>
 <c></c>
 <l>dev_set_window (WindowHandle2)</l>
-<l>    grab_image(ImageRef, AcqHandle)</l>
-<l>    dev_display (ImageRef)</l>
 <c></c>
-<l>    wait_live:=1</l>
-<l>    while (wait_live)</l>
-<l>         grab_image(ImageTemp, AcqHandle) </l>
-<l>         dev_display (ImageTemp)</l>
-<l>         dev_disp_text ('Insert object and click left mouse button', 'window', 'top', 'left', 'black', [], [])    </l>
-<l>         get_mbutton (WindowHandle2, Row, Column, Button)</l>
-<l>         if (Button=1)</l>
-<l>            wait_live:=1 </l>
-<l>             ImageChanged:=ImageTemp</l>
-<l>         endif </l>
-<l>    endwhile</l>
-<l>draw_region (Region, WindowHandle2)</l>
-<c></c>
-<l>segment_dots (ImageRef, Region, RegionIntersectionref, rowRef, columnRef)</l>
-<l>segment_dots (ImageChanged, Region, RegionIntersectionChanged, rowChanged, columnChanged)</l>
+<l>if(Live)</l>
+<l>    grab_image(ImageRef, AcqHandle) </l>
+<l>else</l>
+<l>    read_image (ImageRef, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Ref/test.tiff')</l>
+<l>endif</l>
+<l>dev_display (ImageRef)</l>
 <c></c>
 <c></c>
+<l>live_view:=1</l>
+<l>while (live_view)</l>
+<l>    if(Live)</l>
+<l>        grab_image(ImageTemp, AcqHandle) </l>
+<l>    else</l>
+<l>        read_image (ImageTemp, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/ID003/test37.tiff')</l>
+<l>    endif</l>
+<l>    dev_display (ImageTemp)</l>
+<l>    dev_disp_text ('Insert object and click left mouse button', 'window', 'top', 'left', 'black', [], [])    </l>
+<l>    get_mbutton (WindowHandle2, Row, Column, Button)</l>
+<l>    if (Button=1)</l>
+<l>        live_view:=0</l>
+<l>        ImageChanged:=ImageTemp</l>
+<l>    endif </l>
+<l>endwhile</l>
+<l>dev_display (ImageRef)</l>
+<c></c>
+<l>rotate_image (ImageRef, ImageRef, 10, 'constant')</l>
+<c></c>
+<l>median_image (ImageRef, ImageMedian, 'circle', 10, 'mirrored')</l>
+<l>dyn_threshold (ImageRef, ImageMedian, RegionDynThresh, 40, 'dark')</l>
+<l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
+<l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
+<l>connection (RegionClosing, ConnectedRegions1)</l>
+<l>select_shape (ConnectedRegions1, SelectedRegions, 'area', 'and', 42.585, 100)</l>
+<l>union1 (SelectedRegions, RegionUnion)</l>
+<l>smallest_rectangle2 (RegionUnion, Row, Column, Phi, Length1, Length2)</l>
+<l>gen_rectangle2 (Rectangle2, Row, Column, Phi, Length1, Length2)</l>
+<l>rotate_image (ImageRef, ImageRotate,270-(Phi/3.1415)*180, 'constant')</l>
+<c></c>
+<l>median_image (ImageRotate, ImageMedian, 'circle', 10, 'mirrored')</l>
+<l>dyn_threshold (ImageRotate, ImageMedian, RegionDynThresh, 35, 'dark')</l>
+<l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
+<l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
+<l>connection (RegionClosing, ConnectedRegions1)</l>
+<l>select_shape (ConnectedRegions1, SelectedRegions, 'area', 'and', 42.585, 100)</l>
+<l>union1 (SelectedRegions, RegionUnion)</l>
+<l>smallest_rectangle2 (RegionUnion, Row, Column, Phi, Length1, Length2)</l>
+<l>gen_rectangle2 (Rectangle1, Row, Column, Phi, Length1, Length2)</l>
+<c></c>
+<c></c>
+<c></c>
+<l>disp_</l>
 <c></c>
 <l>distance_pp (rowRef, columnRef, rowChanged, columnChanged, Distance)</l>
-<l>create_funct_1d_array (rowRef-rowChanged, FunctionRow)</l>
-<l>create_funct_1d_array (columnRef-columnChanged, FunctionColumn)</l>
 <c></c>
-<l>smooth_funct_1d_gauss (FunctionRow, 2, SmoothedFunctionRef)</l>
-<l>smooth_funct_1d_gauss (FunctionColumn, 2, SmoothedFunctionChanged)</l>
-<c></c>
-<l>GenParamNames := ['grid', 'grid_color','start_x','start_y','end_x','end_y']</l>
-<l>GenParamValues := ['true','pink',0,0,200,200]</l>
-<c></c>
-<l>plot_funct_1d (WindowHandle2, SmoothedFunctionRef, [], [], 'red',GenParamNames, GenParamValues)</l>
-<l>plot_funct_1d (WindowHandle2, SmoothedFunctionChanged, [], [], 'green',GenParamNames, GenParamValues)</l>
-<c></c>
-<l>dev_display (ImageRef)</l>
+<l>disp_arrow (WindowHandle2, 0, 0, 0, 0,0.5)</l>
 <c></c>
 <c></c>
 <c></c>
