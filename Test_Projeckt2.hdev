@@ -103,13 +103,32 @@
 <l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
 <l>connection (RegionClosing, ConnectedRegions1)</l>
 <l>select_shape (ConnectedRegions1, SelectedRegions, 'area', 'and', 42.585, 100)</l>
+<l>count_obj (SelectedRegions, Number)</l>
+<l>Side_number:=int(sqrt(Number))</l>
 <l>union1 (SelectedRegions, RegionUnion)</l>
 <l>smallest_rectangle2 (RegionUnion, Row, Column, Phi, Length1, Length2)</l>
-<l>gen_rectangle2 (Rectangle1, Row, Column, Phi, Length1, Length2)</l>
+<c></c>
+<l>gen_rectangle2 (Rectangle1, Row, Column, Phi, Length1+Length1/(Side_number-1), Length2+Length2/(Side_number-1))</l>
+<c></c>
+<l>gen_empty_obj (Regions)</l>
+<l>rowsref:=[]</l>
+<l>columsref:=[]</l>
+<l>for j := 0 to Side_number-1 by 1</l>
+<l>    for i := 0 to Side_number-1 by 1</l>
+<l>  clip_region (Rectangle1, RegionClipped, (Row-(Length1+Length1/(Side_number-1))+ (Length1*2/(Side_number-1))*(j)), Column-(Length2+Length2/(Side_number-1))+ ((Length2*2)/(Side_number-1))*(i), Row-(Length1+Length1/(Side_number-1)) + (Length1*2/(Side_number-1))*(j+1), Column-(Length2+Length2/(Side_number-1)) + ((Length2*2)/(Side_number-1))*(i+1))</l>
+<l>  intersection (RegionDynThresh, RegionClipped, RegionIntersection)</l>
+<l>  region_features (RegionIntersection, 'row', row_out)</l>
+<l>  region_features (RegionIntersection, 'column', column_out)</l>
+<l>rowsref:=[rowsref,row_out]</l>
+<l>columsref:=[columsref,column_out]</l>
 <c></c>
 <c></c>
 <c></c>
-<l>disp_</l>
+<l>  concat_obj (Regions, Rectangle1, Regions)</l>
+<l>    endfor</l>
+<l>endfor</l>
+<c></c>
+<l>complement (Regions, RegionsComplement)</l>
 <c></c>
 <l>distance_pp (rowRef, columnRef, rowChanged, columnChanged, Distance)</l>
 <c></c>
