@@ -84,7 +84,7 @@
 <l>endwhile</l>
 <l>dev_display (ImageRef)</l>
 <c></c>
-<l>rotate_image (ImageRef, ImageRef, 10, 'constant')</l>
+<c></c>
 <c></c>
 <l>median_image (ImageRef, ImageMedian, 'circle', 10, 'mirrored')</l>
 <l>dyn_threshold (ImageRef, ImageMedian, RegionDynThresh, 40, 'dark')</l>
@@ -96,9 +96,13 @@
 <l>smallest_rectangle2 (RegionUnion, Row, Column, Phi, Length1, Length2)</l>
 <l>gen_rectangle2 (Rectangle2, Row, Column, Phi, Length1, Length2)</l>
 <l>rotate_image (ImageRef, ImageRotate,270-(Phi/3.1415)*180, 'constant')</l>
-<c></c>
+<l>rotate_image (ImageChanged, ImageRotateChanged,270-(Phi/3.1415)*180, 'constant')</l>
 <l>median_image (ImageRotate, ImageMedian, 'circle', 10, 'mirrored')</l>
+<l>median_image (ImageRotateChanged, ImageMedianchanged, 'circle', 10, 'mirrored')</l>
 <l>dyn_threshold (ImageRotate, ImageMedian, RegionDynThresh, 35, 'dark')</l>
+<l>dyn_threshold (ImageRotateChanged, ImageMedianchanged, RegionDynThreshChanged, 35, 'dark')</l>
+<c></c>
+<c></c>
 <l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
 <l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
 <l>connection (RegionClosing, ConnectedRegions1)</l>
@@ -113,14 +117,23 @@
 <l>gen_empty_obj (Regions)</l>
 <l>rowsref:=[]</l>
 <l>columsref:=[]</l>
+<l>rowschanged:=[]</l>
+<l>columschanged:=[]</l>
+<c></c>
 <l>for j := 0 to Side_number-1 by 1</l>
 <l>    for i := 0 to Side_number-1 by 1</l>
 <l>  clip_region (Rectangle1, RegionClipped, (Row-(Length1+Length1/(Side_number-1))+ (Length1*2/(Side_number-1))*(j)), Column-(Length2+Length2/(Side_number-1))+ ((Length2*2)/(Side_number-1))*(i), Row-(Length1+Length1/(Side_number-1)) + (Length1*2/(Side_number-1))*(j+1), Column-(Length2+Length2/(Side_number-1)) + ((Length2*2)/(Side_number-1))*(i+1))</l>
 <l>  intersection (RegionDynThresh, RegionClipped, RegionIntersection)</l>
 <l>  region_features (RegionIntersection, 'row', row_out)</l>
 <l>  region_features (RegionIntersection, 'column', column_out)</l>
+<l>    intersection (RegionDynThreshChanged, RegionClipped, RegionIntersection)</l>
+<l>  region_features (RegionIntersection, 'row', row_out2)</l>
+<l>  region_features (RegionIntersection, 'column', column_out2)</l>
+<c>  </c>
 <l>rowsref:=[rowsref,row_out]</l>
 <l>columsref:=[columsref,column_out]</l>
+<l>rowschanged:=[rowschanged,row_out2]</l>
+<l>columschanged:=[columschanged,column_out2]</l>
 <c></c>
 <c></c>
 <c></c>
@@ -128,11 +141,11 @@
 <l>    endfor</l>
 <l>endfor</l>
 <c></c>
-<l>complement (Regions, RegionsComplement)</l>
+<l>distance_pp (rowsref, columsref, rowschanged, columschanged, Distance)</l>
+<l>dev_display (ImageRotate)</l>
 <c></c>
-<l>distance_pp (rowRef, columnRef, rowChanged, columnChanged, Distance)</l>
 <c></c>
-<l>disp_arrow (WindowHandle2, 0, 0, 0, 0,0.5)</l>
+<l>disp_arrow (WindowHandle2, rowsref, columsref, rowschanged, columschanged,3)</l>
 <c></c>
 <c></c>
 <c></c>
