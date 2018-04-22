@@ -4,7 +4,6 @@
 <interface>
 <io>
 <par name="image_in" base_type="iconic" dimension="0"/>
-<par name="Regiontosement" base_type="iconic" dimension="0"/>
 </io>
 <oo>
 <par name="RegionIntersection" base_type="iconic" dimension="0"/>
@@ -20,9 +19,15 @@
 <l>dyn_threshold (image_in, ImageMedian, RegionDynThresh, 30, 'dark')</l>
 <l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
 <l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
+<c></c>
+<l>smallest_rectangle2 (RegionClosing, Row, Column, Phi, Length1, Length2)</l>
+<l>gen_rectangle2 (Rectangle, Row, Column, Phi, Length1, Length2)</l>
+<l>dilation_circle (Rectangle, RegionDilation, 3.5)</l>
+<c></c>
 <l>connection (RegionClosing, ConnectedRegions)</l>
-<l>intersection (Regiontosement, ConnectedRegions, RegionIntersection)</l>
-<l>connection (RegionIntersection, ConnectedRegions)</l>
+<c></c>
+<c></c>
+<c></c>
 <l>region_features (ConnectedRegions, 'row', row_out)</l>
 <l>region_features (ConnectedRegions, 'column', column_out)</l>
 <l>return ()</l>
@@ -30,7 +35,6 @@
 <docu id="segment_dots">
 <parameters>
 <parameter id="RegionIntersection"/>
-<parameter id="Regiontosement"/>
 <parameter id="column_out"/>
 <parameter id="image_in"/>
 <parameter id="row_out"/>
