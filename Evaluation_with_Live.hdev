@@ -67,7 +67,7 @@
 <l>if(Live)</l>
 <l>    grab_image(ImageChanged, AcqHandle) </l>
 <l>else</l>
-<l>    read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Test1 ID002/test59.tiff')</l>
+<l>    read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Test1 ID001/test5.tiff')</l>
 <l>endif</l>
 <c></c>
 <l>dev_display (ImageRef)</l>
@@ -134,7 +134,7 @@
 <l>    segment_dots (ImageChanged, RegionAffineTrans, rowchanged, columchanged)</l>
 <l>    distance_pp (rowref, columnref, rowchanged, columchanged, Distance)</l>
 <c>    </c>
-<l>*     disp_arrow (WindowHandle2, rowsref, columsref, rowchanged, columchanged,3)</l>
+<l>    disp_arrow (WindowHandle2, rowsref, columsref, rowchanged, columchanged,3)</l>
 <l>    distance_px:=10000</l>
 <l>    n:=1.4</l>
 <l>    Alphax:=atan((rowref-rowchanged)/distance_px)</l>
