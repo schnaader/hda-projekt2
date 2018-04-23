@@ -67,7 +67,7 @@
 <l>if(Live)</l>
 <c></c>
 <l>else</l>
-<l>    read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Test1 ID001/test5.tiff')</l>
+<l>    read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Test2 ID002/test32.tiff')</l>
 <l>endif</l>
 <c></c>
 <l>dev_display (ImageRef)</l>
@@ -131,23 +131,36 @@
 <l>    endif</l>
 <c>    </c>
 <c>    </c>
-<l>    segment_dots (ImageChanged, RegionAffineTrans, rowchanged, columchanged)</l>
-<l>    distance_pp (rowref, columnref, rowchanged, columchanged, Distance)</l>
+<l>    segment_dots (ImageChanged, RegionAffineTrans, rowschanged, columchanged)</l>
+<l>    distance_pp (rowref, columnref, rowschanged, columchanged, Distance)</l>
 <c>    </c>
-<l>    disp_arrow (WindowHandle2, rowsref, columsref, rowchanged, columchanged,3)</l>
+<l>    *disp_arrow (WindowHandle2, rowsref, columsref, rowchanged, columchanged,3)</l>
+<l>    tuple_find (rowsref, 0.0, Indices1)</l>
+<l>    tuple_find (columnref, 0.0, Indices2)</l>
+<l>    tuple_find (rowschanged, 0.0, Indices3)</l>
+<l>    tuple_find (columchanged, 0.0, Indices4)</l>
+<l>    Indicesremove:=[Indices1,Indices2,Indices3,Indices4]</l>
+<l>   tuple_find (Indicesremove, -1, Indices5)</l>
+<l>   tuple_remove (Indicesremove, Indices5, Indicesremove)</l>
+<c>    </c>
+<l>   tuple_remove (rowsref, Indicesremove, rowsref)</l>
+<l>    tuple_remove (columnref, Indicesremove, columnref)</l>
+<l>    tuple_remove (rowschanged, Indicesremove, rowschanged)</l>
+<l>    tuple_remove (columchanged, Indicesremove, columchanged)</l>
+<c>    </c>
 <l>    distance_px:=10000</l>
 <l>    n:=1.4</l>
-<l>    Alphax:=atan((rowref-rowchanged)/distance_px)</l>
+<l>    Alphax:=atan((rowsref-rowschanged)/distance_px)</l>
 <l>    Alphay:=atan((columnref-columchanged)/distance_px)</l>
 <l>    Anglex:=atan((sin(Alphax))/(n-cos(Alphax)))</l>
 <l>    Angley:=atan((sin(Alphay))/(n-cos(Alphay)))</l>
 <l>        if(Live)</l>
 <l>            dev_display (ImageChanged)</l>
-<l>            disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</l>
+<c>           **// disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</c>
 <c></c>
 <l>    else</l>
-<l>        disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</l>
-<c></c>
+<c>        **disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</c>
+<l>disp_arrow (WindowHandle2, rowsref, columnref, rowschanged, columchanged, 2)</l>
 <l>        break</l>
 <c>        </c>
 <l>    endif</l>
