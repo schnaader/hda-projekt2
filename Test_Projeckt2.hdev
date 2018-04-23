@@ -72,7 +72,7 @@
 <l>    if(Live)</l>
 <l>        grab_image(ImageTemp, AcqHandle) </l>
 <l>    else</l>
-<l>        read_image (ImageTemp, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/ID003/test37.tiff')</l>
+<l>        read_image (ImageTemp, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Test1 ID002/test59.tiff')</l>
 <l>    endif</l>
 <l>    dev_display (ImageTemp)</l>
 <l>    dev_disp_text ('Insert object and click left mouse button', 'window', 'top', 'left', 'black', [], [])    </l>
@@ -148,10 +148,14 @@
 <l>disp_arrow (WindowHandle2, rowsref, columsref, rowschanged, columschanged,3)</l>
 <c></c>
 <c></c>
+<l>distance_px:=10000</l>
+<l>n:=1.4</l>
+<l>Alphax:=atan((rowsref-rowschanged)/distance_px)</l>
+<l>Alphay:=atan((columsref-columschanged)/distance_px)</l>
+<l>Anglex:=atan((sin(Alphax))/(n-cos(Alphax)))</l>
+<l>Angley:=atan((sin(Alphay))/(n-cos(Alphay)))</l>
 <c></c>
-<c></c>
-<c></c>
-<c></c>
+<l>disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</l>
 <c></c>
 <c></c>
 <c></c>
