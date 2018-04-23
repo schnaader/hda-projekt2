@@ -65,7 +65,7 @@
 <c></c>
 <c></c>
 <l>if(Live)</l>
-<l>    grab_image(ImageChanged, AcqHandle) </l>
+<c></c>
 <l>else</l>
 <l>    read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Test1 ID001/test5.tiff')</l>
 <l>endif</l>
