@@ -4,10 +4,8 @@
 <interface>
 <io>
 <par name="image_in" base_type="iconic" dimension="0"/>
-</io>
-<oo>
 <par name="RegionIntersection" base_type="iconic" dimension="0"/>
-</oo>
+</io>
 <oc>
 <par name="row_out" base_type="ctrl" dimension="0"/>
 <par name="column_out" base_type="ctrl" dimension="0"/>
@@ -16,8 +14,8 @@
 <body>
 <c></c>
 <l>median_image (image_in, ImageMedian, 'circle', 10, 'mirrored')</l>
-<l>dyn_threshold (image_in, ImageMedian, RegionDynThresh, 30, 'dark')</l>
-<l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
+<l>dyn_threshold (image_in, ImageMedian, RegionDynThresh, 35, 'dark')</l>
+<l>opening_circle (RegionDynThresh, RegionOpening, 3)</l>
 <l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
 <c></c>
 <l>smallest_rectangle2 (RegionClosing, Row, Column, Phi, Length1, Length2)</l>
@@ -25,11 +23,26 @@
 <l>dilation_circle (Rectangle, RegionDilation, 3.5)</l>
 <c></c>
 <l>connection (RegionClosing, ConnectedRegions)</l>
+<l>count_obj (RegionIntersection, Number)</l>
+<l>row_out:=[]</l>
+<l>column_out:=[]</l>
+<c></c>
+<l>for Index := 1 to Number by 1</l>
+<l>  select_obj (RegionIntersection, ObjectSelected, Index)</l>
+<l>intersection (ObjectSelected,ConnectedRegions, regiontemp)</l>
+<l>region_features (regiontemp, 'row', row_temp)</l>
+<l>region_features (regiontemp, 'column', column_temp)  </l>
+<l>if(|row_temp|&lt;1)</l>
+<l>  row_temp:=''  </l>
+<l>endif</l>
+<l>if(|column_temp|&lt;1)</l>
+<l>  column_temp:=''  </l>
+<l>endif</l>
+<l>row_out:=[row_out,row_temp]</l>
+<l>column_out:=[column_out,column_temp]</l>
+<l>endfor</l>
 <c></c>
 <c></c>
-<c></c>
-<l>region_features (ConnectedRegions, 'row', row_out)</l>
-<l>region_features (ConnectedRegions, 'column', column_out)</l>
 <l>return ()</l>
 </body>
 <docu id="segment_dots">

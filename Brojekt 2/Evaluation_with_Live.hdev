@@ -27,9 +27,6 @@
 <c></c>
 <c></c>
 <c></c>
-<c></c>
-<c></c>
-<c></c>
 <l>Height_Ref_Image:=1024</l>
 <l>Width_Ref_Image:=1024</l>
 <c></c>
@@ -40,8 +37,10 @@
 <l>spacing_x:=150</l>
 <l>spacing_y:=150</l>
 <c></c>
+<l>Live:=0</l>
 <c></c>
 <c></c>
+<c>*generating a dot matrix</c>
 <l>dot_gen (ResultImages, ImageResult2, Width_Ref_Image, Height_Ref_Image, back_brightness, spacing_x, spacing_y, dot_Radius, dot_brightness)</l>
 <c></c>
 <l>dev_clear_window ()</l>
@@ -51,11 +50,9 @@
 <l>dev_display (ImageResult2)</l>
 <c></c>
 <c></c>
-<l>Live:=0</l>
 <l>if(Live)</l>
 <l>    init_Camera (AcqHandle, Exception)</l>
 <l>endif</l>
-<c></c>
 <c></c>
 <l>dev_set_window (WindowHandle2)</l>
 <c></c>
@@ -67,21 +64,13 @@
 <l>dev_display (ImageRef)</l>
 <c></c>
 <c></c>
-<l>live_view:=1</l>
-<l>    if(Live)</l>
-<l>        grab_image(ImageTemp, AcqHandle) </l>
-<l>    else</l>
-<l>        read_image (ImageTemp, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Test1 ID002/test59.tiff')</l>
-<l>    endif</l>
-<l>    dev_display (ImageTemp)</l>
-<l>    dev_disp_text ('Insert object and click left mouse button', 'window', 'top', 'left', 'black', [], [])    </l>
-<l>    get_mbutton (WindowHandle2, Row, Column, Button)</l>
-<l>    if (Button=1)</l>
-<l>        live_view:=0</l>
-<l>        ImageChanged:=ImageTemp</l>
-<l>    endif </l>
-<l>dev_display (ImageRef)</l>
+<l>if(Live)</l>
+<l>    grab_image(ImageChanged, AcqHandle) </l>
+<l>else</l>
+<l>    read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Test1 ID002/test59.tiff')</l>
+<l>endif</l>
 <c></c>
+<l>dev_display (ImageRef)</l>
 <c></c>
 <c></c>
 <l>median_image (ImageRef, ImageMedian, 'circle', 10, 'mirrored')</l>
@@ -93,14 +82,14 @@
 <l>union1 (SelectedRegions, RegionUnion)</l>
 <l>smallest_rectangle2 (RegionUnion, Row, Column, Phi, Length1, Length2)</l>
 <l>gen_rectangle2 (Rectangle2, Row, Column, Phi, Length1, Length2)</l>
-<l>rotate_image (ImageRef, ImageRotate,270-(Phi/3.1415)*180, 'constant')</l>
-<l>rotate_image (ImageChanged, ImageRotateChanged,270-(Phi/3.1415)*180, 'constant')</l>
+<c></c>
+<l>hom_mat2d_identity (HomMat2DIdentity)</l>
+<l>hom_mat2d_rotate (HomMat2DIdentity, 3.1415*1/2-Phi,  Row,Column, HomMat2DRotate)</l>
+<l>affine_trans_image (ImageRef, ImageRotate, HomMat2DRotate, 'constant', 'false')</l>
+<c></c>
+<c></c>
 <l>median_image (ImageRotate, ImageMedian, 'circle', 10, 'mirrored')</l>
-<l>median_image (ImageRotateChanged, ImageMedianchanged, 'circle', 10, 'mirrored')</l>
 <l>dyn_threshold (ImageRotate, ImageMedian, RegionDynThresh, 35, 'dark')</l>
-<l>dyn_threshold (ImageRotateChanged, ImageMedianchanged, RegionDynThreshChanged, 35, 'dark')</l>
-<c></c>
-<c></c>
 <l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
 <l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
 <l>connection (RegionClosing, ConnectedRegions1)</l>
@@ -120,62 +109,49 @@
 <c></c>
 <l>for j := 0 to Side_number-1 by 1</l>
 <l>    for i := 0 to Side_number-1 by 1</l>
-<l>clip_region (Rectangle1, RegionClipped, (Row-(Length1+Length1/(Side_number-1))+ (Length1*2/(Side_number-1))*(j)), Column-(Length2+Length2/(Side_number-1))+ ((Length2*2)/(Side_number-1))*(i), Row-(Length1+Length1/(Side_number-1)) + (Length1*2/(Side_number-1))*(j+1), Column-(Length2+Length2/(Side_number-1)) + ((Length2*2)/(Side_number-1))*(i+1))</l>
-<l>  intersection (RegionDynThresh, RegionClipped, RegionIntersection)</l>
-<l>  region_features (RegionIntersection, 'row', row_out)</l>
-<l>  region_features (RegionIntersection, 'column', column_out)</l>
-<l>    intersection (RegionDynThreshChanged, RegionClipped, RegionIntersection)</l>
-<l>  region_features (RegionIntersection, 'row', row_out2)</l>
-<l>  region_features (RegionIntersection, 'column', column_out2)</l>
-<c>  </c>
-<l>rowsref:=[rowsref,row_out]</l>
-<l>columsref:=[columsref,column_out]</l>
-<l>rowschanged:=[rowschanged,row_out2]</l>
-<l>columschanged:=[columschanged,column_out2]</l>
-<c></c>
-<c></c>
-<c></c>
-<l>  concat_obj (Regions, Rectangle1, Regions)</l>
+<l>        clip_region (Rectangle1, RegionClipped, (Row-(Length1+Length1/(Side_number))+ (Length1*2/(Side_number-1))*(j)), Column-(Length2+Length2/(Side_number))+ ((Length2*2)/(Side_number-1))*(i), Row-(Length1+Length1/(Side_number)) + (Length1*2/(Side_number-1))*(j+1), Column-(Length2+Length2/(Side_number)) + ((Length2*2)/(Side_number-1))*(i+1))</l>
+<l>        intersection (RegionDynThresh, RegionClipped, RegionIntersection)</l>
+<l>        region_features (RegionIntersection, 'row', row_out)</l>
+<l>        region_features (RegionIntersection, 'column', column_out)</l>
+<l>        rowsref:=[rowsref,row_out]</l>
+<l>        columsref:=[columsref,column_out]</l>
+<l>        concat_obj (Regions, RegionClipped, Regions)</l>
 <l>    endfor</l>
 <l>endfor</l>
 <c></c>
-<l>distance_pp (rowsref, columsref, rowschanged, columschanged, Distance)</l>
-<l>dev_display (ImageRotate)</l>
+<l>hom_mat2d_rotate (HomMat2DRotate, -(3.1415*1/2-Phi), Column, Row, HomMat2DRotate1)</l>
+<l>affine_trans_region (Regions, RegionAffineTrans, HomMat2DRotate1, 'nearest_neighbor')</l>
+<l>count_obj (RegionAffineTrans, Number1)</l>
 <c></c>
+<l>segment_dots (ImageRef, RegionAffineTrans, rowref, columnref)</l>
 <c></c>
-<l>disp_arrow (WindowHandle2, rowsref, columsref, rowschanged, columschanged,3)</l>
+<l>while(1)</l>
+<l>    if(Live)</l>
+<l>        grab_image(ImageChanged, AcqHandle)        </l>
+<l>    endif</l>
+<c>    </c>
+<c>    </c>
+<l>    segment_dots (ImageChanged, RegionAffineTrans, rowchanged, columchanged)</l>
+<l>    distance_pp (rowref, columnref, rowchanged, columchanged, Distance)</l>
+<c>    </c>
+<l>*     disp_arrow (WindowHandle2, rowsref, columsref, rowchanged, columchanged,3)</l>
+<l>    distance_px:=10000</l>
+<l>    n:=1.4</l>
+<l>    Alphax:=atan((rowref-rowchanged)/distance_px)</l>
+<l>    Alphay:=atan((columnref-columchanged)/distance_px)</l>
+<l>    Anglex:=atan((sin(Alphax))/(n-cos(Alphax)))</l>
+<l>    Angley:=atan((sin(Alphay))/(n-cos(Alphay)))</l>
+<l>        if(Live)</l>
+<l>            dev_display (ImageChanged)</l>
+<l>            disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</l>
 <c></c>
+<l>    else</l>
+<l>        disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</l>
 <c></c>
-<l>distance_px:=10000</l>
-<l>n:=1.4</l>
-<l>Alphax:=atan((rowsref-rowschanged)/distance_px)</l>
-<l>Alphay:=atan((columsref-columschanged)/distance_px)</l>
-<l>Anglex:=atan((sin(Alphax))/(n-cos(Alphax)))</l>
-<l>Angley:=atan((sin(Alphay))/(n-cos(Alphay)))</l>
-<c></c>
-<l>disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</l>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
-<c></c>
+<l>        break</l>
+<c>        </c>
+<l>    endif</l>
+<l>endwhile</l>
 <c></c>
 <c></c>
 <c></c>
