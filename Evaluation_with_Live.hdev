@@ -147,6 +147,7 @@
 <l>    tuple_remove (columnref, Indicesremove, columnref)</l>
 <l>    tuple_remove (rowschanged, Indicesremove, rowschanged)</l>
 <l>    tuple_remove (columchanged, Indicesremove, columchanged)</l>
+<l>     tuple_remove (Distance, Indicesremove, Distance)   </l>
 <c>    </c>
 <l>    distance_px:=10000</l>
 <l>    n:=1.4</l>
@@ -160,11 +161,17 @@
 <c></c>
 <l>    else</l>
 <c>        **disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</c>
-<l>disp_arrow (WindowHandle2, rowsref, columnref, rowschanged, columchanged, 2)</l>
-<l>        break</l>
+<l>*disp_arrow (WindowHandle2, rowsref, columnref, rowschanged, columchanged, 2)</l>
+<c>    </c>
+<l>*convert_tuple_to_vector_1d (Anglex, |Distance|, ResultVectorx)</l>
+<l>*convert_tuple_to_vector_1d (Angley, |Distance|, ResultVectory)</l>
+<c></c>
+<c></c>
+<l>break</l>
 <c>        </c>
 <l>    endif</l>
 <l>endwhile</l>
+<c></c>
 <c></c>
 <c></c>
 <c></c>
