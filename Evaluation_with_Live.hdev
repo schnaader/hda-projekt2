@@ -42,10 +42,13 @@
 <c></c>
 <c>*generating a dot matrix</c>
 <l>dot_gen (ResultImages, ImageResult2, Width_Ref_Image, Height_Ref_Image, back_brightness, spacing_x, spacing_y, dot_Radius, dot_brightness)</l>
+<l>for Index := 1 to 5 by 1</l>
+<l> dev_close_window ()   </l>
+<l>endfor</l>
 <c></c>
-<l>dev_clear_window ()</l>
+<c></c>
 <l>dev_open_window_fit_size (0, 0, Width_Ref_Image, Height_Ref_Image, -1, -1, WindowHandle)</l>
-<l>dev_open_window_fit_size (0, 1000, Width_Ref_Image, Height_Ref_Image, -1, -1, WindowHandle2)</l>
+<l>dev_open_window_fit_size (0, 600, Width_Ref_Image, Height_Ref_Image, -1, -1, WindowHandle2)</l>
 <l>dev_set_window (WindowHandle)</l>
 <l>dev_display (ImageResult2)</l>
 <c></c>
@@ -186,11 +189,22 @@
 <c>*tuple of tuples containing a curve in x direction each starting at 0 </c>
 <l> convert_tuple_to_vector_1d (heightx, NumberGridPointsxory+1, ResultVectornew)     </l>
 <c> </c>
-<l> gen_cross_contour_xld (Cross, [0:(NumberGridPointsxory-1)], heightx[0:(NumberGridPointsxory-1)], 12, 0.785398)</l>
-<l>gen_nurbs_interp ([0:(NumberGridPointsxory-1)], heightx[0:(NumberGridPointsxory-1)], Anglex[0:(NumberGridPointsxory-1)], 3, CtrlRows, CtrlCols, Knots)</l>
-<l>gen_contour_nurbs_xld (Contour, CtrlRows, CtrlCols, Knots, 'auto', 3, 1, 5)</l>
+<l> CurveDegre:=3</l>
+<l> someTangents:=(Anglexnew[0:5]/3.1415)*180</l>
+<l> Rows:=[0:1:(NumberGridPointsxory-1)]</l>
+<l> Cols:=heightx[0:(NumberGridPointsxory-1)]</l>
+<l>gen_nurbs_interp (Rows,Cols,someTangents,CurveDegre, CtrlRows1, CtrlCols1, Knots1)</l>
+<l>*gen_contour_nurbs_xld (Contour, CtrlRows, CtrlCols, Knots, 'auto', 3, 1, 5)</l>
 <c> </c>
-<c>    </c>
+<c> *Visualisation of 3D models</c>
+<l>X:=[0,1,2,3]</l>
+<l>Y:=[0,2,3,1]</l>
+<l>Z:=[3,2,1,1]</l>
+<l>gen_object_model_3d_from_points (X, Y, Z, ObjectModel3D)</l>
+<l>*xyz_to_object_model_3d(X, Y, Z, ObjectModel3D)</l>
+<l>gen_cam_par_area_scan_division (0.016, 0, 5e-6, 5e-6, 320, 240, 640, 480, CamParam)</l>
+<l>create_pose (-0.02, 0.01, .6, 110, 5, 320, 'Rp+T', 'gba', 'point', Pose1)</l>
+<l>visualize_object_model_3d (WindowHandle, ObjectModel3D, CamParam, Pose1, ['point_size_1'], [10], ['test'], [], [], PoseOut)</l>
 <c></c>
 <l>break</l>
 <c>        </c>
