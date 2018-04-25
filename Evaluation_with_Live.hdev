@@ -142,11 +142,7 @@
 <l>    Indicesremove:=[Indices1,Indices2,Indices3,Indices4]</l>
 <l>   tuple_find (Indicesremove, -1, Indices5)</l>
 <l>   tuple_remove (Indicesremove, Indices5, Indicesremove)</l>
-<c>    </c>
-<l>   tuple_remove (rowsref, Indicesremove, rowsref)</l>
-<l>    tuple_remove (columnref, Indicesremove, columnref)</l>
-<l>    tuple_remove (rowschanged, Indicesremove, rowschanged)</l>
-<l>    tuple_remove (columchanged, Indicesremove, columchanged)</l>
+<c>  </c>
 <l>     tuple_remove (Distance, Indicesremove, Distance)   </l>
 <c>    </c>
 <l>    distance_px:=10000</l>
@@ -165,7 +161,29 @@
 <c>    </c>
 <l>*convert_tuple_to_vector_1d (Anglex, |Distance|, ResultVectorx)</l>
 <l>*convert_tuple_to_vector_1d (Angley, |Distance|, ResultVectory)</l>
-<c></c>
+<c>**TRing to interpolate some kind of surface structure </c>
+<l>  NumberRects:=Number1 </l>
+<l>  NumberGridPointsxory:=int(sqrt(NumberRects))</l>
+<c>  </c>
+<c>*tupleTest:=at(0).Anglex[0:(NumberGridPoints-1)]</c>
+<c>    </c>
+<l>           tuple_replace (Anglex, Indicesremove, 0.0, Anglexnew)</l>
+<l> convert_tuple_to_vector_1d (Anglexnew, NumberGridPointsxory, ResultVector)</l>
+<c> </c>
+<l> heightx:=[]</l>
+<l> for Indexy := 0 to NumberGridPointsxory-1 by 1</l>
+<l>  heightxSeed:=[0.0]  </l>
+<l>     for Indexx := 0 to NumberGridPointsxory-1 by 1</l>
+<c>        *surface curve in one dimension should be easy to estimate </c>
+<c>        *combining it with a secon dimension needs interpolation between conflicting angles</c>
+<l>        heightxSeed:=[heightxSeed,heightxSeed[Indexx]+ResultVector.at(Indexy)[Indexx]]</l>
+<c>        </c>
+<l>    endfor</l>
+<l>    heightx:=[heightx,heightxSeed]</l>
+<l> endfor</l>
+<c>*tuple of tuples containing a curve in x direction each starting at 0 </c>
+<l> convert_tuple_to_vector_1d (heightx, NumberGridPointsxory+1, ResultVectornew)     </l>
+<c>   </c>
 <c></c>
 <l>break</l>
 <c>        </c>
