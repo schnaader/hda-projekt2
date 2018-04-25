@@ -193,18 +193,18 @@
 <l> someTangents:=(Anglexnew[0:5]/3.1415)*180</l>
 <l> Rows:=[0:1:(NumberGridPointsxory-1)]</l>
 <l> Cols:=heightx[0:(NumberGridPointsxory-1)]</l>
-<l>gen_nurbs_interp (Rows,Cols,someTangents,CurveDegre, CtrlRows1, CtrlCols1, Knots1)</l>
+<l>*gen_nurbs_interp (Rows,Cols,someTangents,CurveDegre, CtrlRows1, CtrlCols1, Knots1)</l>
 <l>*gen_contour_nurbs_xld (Contour, CtrlRows, CtrlCols, Knots, 'auto', 3, 1, 5)</l>
 <c> </c>
 <c> *Visualisation of 3D models</c>
-<l>X:=[0,1,2,3]</l>
-<l>Y:=[0,2,3,1]</l>
-<l>Z:=[3,2,1,1]</l>
+<l>X:=[0,1,1,0]</l>
+<l>Y:=[0,0,1,1]</l>
+<l>Z:=[0,0,0,0]</l>
 <l>gen_object_model_3d_from_points (X, Y, Z, ObjectModel3D)</l>
 <l>*xyz_to_object_model_3d(X, Y, Z, ObjectModel3D)</l>
 <l>gen_cam_par_area_scan_division (0.016, 0, 5e-6, 5e-6, 320, 240, 640, 480, CamParam)</l>
 <l>create_pose (-0.02, 0.01, .6, 110, 5, 320, 'Rp+T', 'gba', 'point', Pose1)</l>
-<l>visualize_object_model_3d (WindowHandle, ObjectModel3D, CamParam, Pose1, ['point_size_1'], [10], ['test'], [], [], PoseOut)</l>
+<l>visualize_object_model_3d (WindowHandle, ObjectModel3D, CamParam, Pose1, [], [], ['test'], [], [], PoseOut)</l>
 <c></c>
 <l>break</l>
 <c>        </c>
