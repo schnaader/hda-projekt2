@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.1" halcon_version="13.0.1.1">
+<hdevelop file_version="1.1" halcon_version="17.12">
 <procedure name="main">
 <interface/>
 <body>
@@ -62,7 +62,7 @@
 <l>if(Live)</l>
 <l>    grab_image(ImageRef, AcqHandle) </l>
 <l>else</l>
-<l>    read_image (ImageRef, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Ref/test.tiff')</l>
+<l>    read_image (ImageRef, '../hda-projekt2/Brojekt 2/Ref/test.tiff')</l>
 <l>endif</l>
 <l>dev_display (ImageRef)</l>
 <c></c>
@@ -70,7 +70,7 @@
 <l>if(Live)</l>
 <c></c>
 <l>else</l>
-<l>    read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Brojekt 2/Test2 ID002/test32.tiff')</l>
+<l>    read_image (ImageChanged, '../hda-projekt2/Brojekt 2/Test2 ID002/test32.tiff')</l>
 <l>endif</l>
 <c></c>
 <l>dev_display (ImageRef)</l>
