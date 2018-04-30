@@ -39,6 +39,10 @@
 <c></c>
 <l>Live:=0</l>
 <c></c>
+<c>*get Timestamp</c>
+<l>get_system_time (MSecond, Second, Minute, Hour, Day, YDay, Month, Year)</l>
+<l>Timestamp:=Year*10000000000000+Month*100000000000+Day*1000000000+Hour*10000000+Minute*100000+Second*1000+MSecond</l>
+<c></c>
 <c></c>
 <c>*generating a dot matrix</c>
 <l>dot_gen (ResultImages, ImageResult2, Width_Ref_Image, Height_Ref_Image, back_brightness, spacing_x, spacing_y, dot_Radius, dot_brightness)</l>
@@ -212,7 +216,7 @@
 <l>endwhile</l>
 <c></c>
 <c>*CSV Data Output</c>
-<l>open_file ('/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Out_Data/Data.csv', 'output', FileHandle)</l>
+<l>open_file ('/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Out_Data/'+Timestamp+'_Data.csv', 'output', FileHandle)</l>
 <l>FirstLine:=['Number',';','Row_Reference',';','Column_Reference',';','xAngle',';','yAngle']</l>
 <l>fwrite_string (FileHandle, FirstLine)</l>
 <c></c>
