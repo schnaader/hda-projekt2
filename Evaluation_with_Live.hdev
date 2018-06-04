@@ -92,7 +92,7 @@
 <c></c>
 <l>hom_mat2d_identity (HomMat2DIdentity)</l>
 <l>hom_mat2d_rotate (HomMat2DIdentity, 3.1415*1/2-Phi,  Row,Column, HomMat2DRotate)</l>
-<l>affine_trans_image (ImageRef, ImageRotate, HomMat2DRotate, 'constant', 'false')</l>
+<l>affine_trans_image (ImageRef, ImageRotate, HomMat2DRotate, 'nearest_neighbor', 'false')</l>
 <c></c>
 <c></c>
 <l>median_image (ImageRotate, ImageMedian, 'circle', 10, 'mirrored')</l>
