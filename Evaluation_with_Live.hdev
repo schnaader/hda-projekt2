@@ -27,15 +27,15 @@
 <c></c>
 <c></c>
 <c></c>
-<l>Height_Ref_Image:=1024</l>
-<l>Width_Ref_Image:=1024</l>
+<l>Height_Ref_Image:=1800</l>
+<l>Width_Ref_Image:=2880</l>
 <c></c>
 <l>back_brightness:=255</l>
 <l>dot_brightness:=0</l>
 <c></c>
-<l>dot_Radius:=10.5</l>
-<l>spacing_x:=150</l>
-<l>spacing_y:=150</l>
+<l>dot_Radius:=5.5</l>
+<l>spacing_x:=100</l>
+<l>spacing_y:=100</l>
 <c></c>
 <l>Live:=0</l>
 <c></c>
@@ -49,6 +49,7 @@
 <l>for Index := 1 to 5 by 1</l>
 <l>    dev_close_window ()   </l>
 <l>endfor</l>
+<l>write_image (ImageResult2, 'png', 0, '../hda-projekt2/Projekt 2/Dot_Image.pn')</l>
 <c></c>
 <c></c>
 <l>dev_open_window_fit_size (0, 0, Width_Ref_Image, Height_Ref_Image, -1, -1, WindowHandle)</l>
@@ -66,7 +67,7 @@
 <l>if(Live)</l>
 <l>    grab_image(ImageRef, AcqHandle) </l>
 <l>else</l>
-<l>    read_image (ImageRef, '../hda-projekt2/Brojekt 2/Ref/test.tiff')</l>
+<l>    read_image (ImageRef, '../hda-projekt2/Projekt 2/Ref/test.tiff')</l>
 <l>endif</l>
 <l>dev_display (ImageRef)</l>
 <c></c>
@@ -74,7 +75,7 @@
 <l>if(Live)</l>
 <c>    </c>
 <l>else</l>
-<l>    read_image (ImageChanged, '../hda-projekt2/Brojekt 2/Test2 ID002/test32.tiff')</l>
+<l>    read_image (ImageChanged, '../hda-projekt2/Projekt 2/Test2 ID002/test32.tiff')</l>
 <l>endif</l>
 <c></c>
 <l>dev_display (ImageRef)</l>
