@@ -33,9 +33,9 @@
 <l>back_brightness:=255</l>
 <l>dot_brightness:=0</l>
 <c></c>
-<l>dot_Radius:=5.5</l>
-<l>spacing_x:=100</l>
-<l>spacing_y:=100</l>
+<l>dot_Radius:=2.5</l>
+<l>spacing_x:=10</l>
+<l>spacing_y:=10</l>
 <c></c>
 <l>Live:=0</l>
 <c></c>

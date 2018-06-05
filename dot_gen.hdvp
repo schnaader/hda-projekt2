@@ -18,7 +18,6 @@
 </interface>
 <body>
 <l>dev_update_off ()</l>
-<l>dev_close_window ()</l>
 <c></c>
 <c></c>
 <l>gen_image_const (Image, 'byte', Width_Ref_Image, Height_Ref_Image)</l>
@@ -37,16 +36,9 @@
 <l>tuplxposall:=[]</l>
 <c></c>
 <l>for Index := 0 to |Tupypos|-1 by 1</l>
-<l>    tuplyposall := [tuplyposall,gen_tuple_const(|Tupxpos|,Tupypos[Index]) ]  </l>
+<l>tuple_insert (tuplyposall, Index*|Tupypos|, gen_tuple_const(|Tupxpos|,Tupypos[Index]), tuplyposall)</l>
+<l>tuple_insert (tuplxposall, Index*|Tupxpos|, Tupxpos, tuplxposall)</l>
 <l>endfor</l>
-<c></c>
-<c></c>
-<c></c>
-<l>for Index1 := 0 to |Tupypos|-1 by 1</l>
-<l>    tuplxposall := [tuplxposall,Tupxpos]</l>
-<l>endfor</l>
-<c></c>
-<c></c>
 <c></c>
 <l>gen_circle (Circle, tuplyposall, tuplxposall, dot_Radiusall)</l>
 <c></c>
