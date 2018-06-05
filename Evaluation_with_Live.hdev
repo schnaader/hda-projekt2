@@ -49,7 +49,7 @@
 <l>for Index := 1 to 5 by 1</l>
 <l>    dev_close_window ()   </l>
 <l>endfor</l>
-<l>write_image (ImageResult2, 'png', 0, '../hda-projekt2/Projekt 2/Dot_Image.pn')</l>
+<l>write_image (ImageResult2, 'png', 0, '../hda-projekt2/Projekt 2/Dot_Image.png')</l>
 <c></c>
 <c></c>
 <l>dev_open_window_fit_size (0, 0, Width_Ref_Image, Height_Ref_Image, Width_Ref_Image, Height_Ref_Image, WindowHandle)</l>
