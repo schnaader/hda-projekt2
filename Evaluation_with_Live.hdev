@@ -29,6 +29,8 @@
 <c></c>
 <l>Height_Ref_Image:=1800</l>
 <l>Width_Ref_Image:=2880</l>
+<l>Height_Ref_Image:=1000</l>
+<l>Width_Ref_Image:=1000</l>
 <c></c>
 <l>back_brightness:=255</l>
 <l>dot_brightness:=0</l>
