@@ -168,8 +168,8 @@
 <l>endwhile</l>
 <c>    </c>
 <l>if(Live)</l>
-<l>else</l>
-<l>    close_framegrabber (AcqHandle)   </l>
+<l>    close_framegrabber (AcqHandle) </l>
+<c>  </c>
 <l>endif</l>
 <c></c>
 <c></c>
