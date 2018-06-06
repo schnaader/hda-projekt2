@@ -29,6 +29,8 @@
 <c></c>
 <l>Height_Ref_Image:=1800</l>
 <l>Width_Ref_Image:=2880</l>
+<l>Height_Ref_Image:=1000</l>
+<l>Width_Ref_Image:=1000</l>
 <c></c>
 <l>back_brightness:=255</l>
 <l>dot_brightness:=0</l>
@@ -49,10 +51,10 @@
 <l>for Index := 1 to 5 by 1</l>
 <l>    dev_close_window ()   </l>
 <l>endfor</l>
-<l>write_image (ImageResult2, 'png', 0, '../hda-projekt2/Projekt 2/Dot_Image.pn')</l>
+<l>write_image (ImageResult2, 'png', 0, '../hda-projekt2/Projekt 2/Dot_Image.png')</l>
 <c></c>
 <c></c>
-<l>dev_open_window_fit_size (0, 0, Width_Ref_Image, Height_Ref_Image, -1, -1, WindowHandle)</l>
+<l>dev_open_window_fit_size (0, 0, Width_Ref_Image, Height_Ref_Image, Width_Ref_Image, Height_Ref_Image, WindowHandle)</l>
 <l>dev_open_window_fit_size (0, 600, Width_Ref_Image, Height_Ref_Image, -1, -1, WindowHandle2)</l>
 <l>dev_set_window (WindowHandle)</l>
 <l>dev_display (ImageResult2)</l>
@@ -72,11 +74,6 @@
 <l>dev_display (ImageRef)</l>
 <c></c>
 <c></c>
-<l>if(Live)</l>
-<c>    </c>
-<l>else</l>
-<l>    read_image (ImageChanged, '../hda-projekt2/Projekt 2/Test2 ID002/test32.tiff')</l>
-<l>endif</l>
 <c></c>
 <l>dev_display (ImageRef)</l>
 <c></c>
@@ -136,13 +133,15 @@
 <l>while(1)</l>
 <l>    if(Live)</l>
 <l>        grab_image(ImageChanged, AcqHandle)        </l>
+<l>    else</l>
+<l>        read_image (ImageChanged, '../hda-projekt2/Projekt 2/Test2 ID002/test32.tiff')</l>
 <l>    endif</l>
 <c>    </c>
 <c>    </c>
 <l>    segment_dots (ImageChanged, RegionAffineTrans, rowschanged, columchanged)</l>
 <l>    distance_pp (rowref, columnref, rowschanged, columchanged, Distance)</l>
 <c>    </c>
-<l>*     disp_arrow (WindowHandle2, rowsref, columsref, rowchanged, columchanged,3)</l>
+<c>    </c>
 <l>    tuple_find (rowsref, 0.0, Indices1)</l>
 <l>    tuple_find (columnref, 0.0, Indices2)</l>
 <l>    tuple_find (rowschanged, 0.0, Indices3)</l>
@@ -151,78 +150,38 @@
 <l>    tuple_find (Indicesremove, -1, Indices5)</l>
 <l>    tuple_remove (Indicesremove, Indices5, Indicesremove)</l>
 <c>    </c>
-<l>    tuple_remove (Distance, Indicesremove, Distance)   </l>
+<l>    tuple_remove (Distance, Indicesremove, Distance) </l>
 <c>    </c>
-<l>    distance_px:=10000</l>
-<l>    n:=1.4</l>
-<l>    Alphax:=atan((rowsref-rowschanged)/distance_px)</l>
-<l>    Alphay:=atan((columnref-columchanged)/distance_px)</l>
-<l>    Anglex:=atan((sin(Alphax))/(n-cos(Alphax)))</l>
-<l>    Angley:=atan((sin(Alphay))/(n-cos(Alphay)))</l>
+<l>    tuple_remove (rowsref, Indicesremove, rowsrefreduced) </l>
+<l>    tuple_remove (columnref, Indicesremove, columnrefreduced) </l>
+<c>    </c>
+<l>    tuple_remove (columchanged, Indicesremove, columchangedreduced) </l>
+<l>    tuple_remove (rowschanged, Indicesremove, rowschangedreduced) </l>
+<l>    dev_display (ImageChanged)</l>
+<l>    disp_arrow (WindowHandle2, rowsrefreduced, columnrefreduced, rowschangedreduced, columchangedreduced,3)</l>
+<c>    </c>
 <l>    if(Live)</l>
-<l>        dev_display (ImageChanged)</l>
-<c>        **// disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</c>
-<c>        </c>
 <l>    else</l>
-<c>        **disp_arrow (WindowHandle2, rowsref, columsref, rowsref+Anglex,columsref+ Angley,3)</c>
-<l>*         disp_arrow (WindowHandle2, rowsref, columnref, rowschanged, columchanged, 2)</l>
-<c>        </c>
-<l>*         convert_tuple_to_vector_1d (Anglex, |Distance|, ResultVectorx)</l>
-<l>*         convert_tuple_to_vector_1d (Angley, |Distance|, ResultVectory)</l>
-<c>        **TRing to interpolate some kind of surface structure </c>
-<l>*         NumberRects:=Number1 </l>
-<l>*         NumberGridPointsxory:=int(sqrt(NumberRects))</l>
-<c>        </c>
-<c>        *tupleTest:=at(0).Anglex[0:(NumberGridPoints-1)]</c>
-<c>        </c>
-<l>*         tuple_replace (Anglex, Indicesremove, 0.0, Anglexnew)</l>
-<l>*         convert_tuple_to_vector_1d (Anglexnew, NumberGridPointsxory, ResultVector)</l>
-<c>        </c>
-<c>        </c>
-<c>        </c>
-<l>*         heightx:=[]</l>
-<l>*         for Indexy := 0 to NumberGridPointsxory-1 by 1</l>
-<l>*             heightxSeed:=[0.0]  </l>
-<l>*             for Indexx := 0 to NumberGridPointsxory-1 by 1</l>
-<c>                *surface curve in one dimension should be easy to estimate </c>
-<c>                *combining it with a secon dimension needs interpolation between conflicting angles</c>
-<l>*                 heightxSeed:=[heightxSeed,heightxSeed[Indexx]+ResultVector.at(Indexy)[Indexx]]</l>
-<c>                </c>
-<l>*             endfor</l>
-<l>*             heightx:=[heightx,heightxSeed]</l>
-<l>*         endfor</l>
-<c>        *tuple of tuples containing a curve in x direction each starting at 0 </c>
-<l>*         convert_tuple_to_vector_1d (heightx, NumberGridPointsxory+1, ResultVectornew)     </l>
-<c>        </c>
-<l>*         CurveDegre:=3</l>
-<l>*         someTangents:=(Anglexnew[0:5]/3.1415)*180</l>
-<l>*         Rows:=[0:1:(NumberGridPointsxory-1)]</l>
-<l>*         Cols:=heightx[0:(NumberGridPointsxory-1)]</l>
-<l>*         gen_nurbs_interp (Rows,Cols,someTangents,CurveDegre, CtrlRows1, CtrlCols1, Knots1)</l>
-<l>*         gen_contour_nurbs_xld (Contour, CtrlRows, CtrlCols, Knots, 'auto', 3, 1, 5)</l>
-<c>        </c>
-<c>        *Visualisation of 3D models</c>
-<l>*         X:=[0,1,1,0]</l>
-<l>*         Y:=[0,0,1,1]</l>
-<l>*         Z:=[0,0,0,0]</l>
-<l>*         gen_object_model_3d_from_points (X, Y, Z, ObjectModel3D)</l>
-<l>*         xyz_to_object_model_3d(X, Y, Z, ObjectModel3D)</l>
-<l>*         gen_cam_par_area_scan_division (0.016, 0, 5e-6, 5e-6, 320, 240, 640, 480, CamParam)</l>
-<l>*         create_pose (-0.02, 0.01, .6, 110, 5, 320, 'Rp+T', 'gba', 'point', Pose1)</l>
-<l>*         visualize_object_model_3d (WindowHandle, ObjectModel3D, CamParam, Pose1, [], [], ['test'], [], [], PoseOut)</l>
-<c>        </c>
-<l>        break</l>
-<c>        </c>
+<l>    break    </l>
 <l>    endif</l>
+<c>    </c>
+<c>    </c>
+<c>    </c>
 <l>endwhile</l>
+<c>    </c>
+<l>if(Live)</l>
+<l>    close_framegrabber (AcqHandle) </l>
+<c>  </c>
+<l>endif</l>
+<c></c>
 <c></c>
 <c>*CSV Data Output</c>
 <l>open_file ('/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Out_Data/'+Timestamp+'_Data.csv', 'output', FileHandle)</l>
-<l>FirstLine:=['Number',';','Row_Reference',';','Column_Reference',';','Row_Changed',';','Column_Changed',';','xAngle',';','yAngle']</l>
+<l>FirstLine:=['Number',';','Row_Reference',';','Column_Reference',';','Row_Changed',';','Column_Changed']</l>
 <l>fwrite_string (FileHandle, FirstLine)</l>
 <c></c>
 <l>for Index1 := 0 to |rowsref|-1 by 1</l>
-<l>    TempString:=[Index1,';',rowsref[Index1],';',columsref[Index1],';',rowschanged[Index1],';',columchanged[Index1],';',Anglex[Index1],';',Angley[Index1]]</l>
+<l>    TempString:=[Index1,';',rowsref[Index1],';',columsref[Index1],';',rowschanged[Index1],';',columchanged[Index1]]</l>
 <l>    fnew_line (FileHandle)</l>
 <l>    fwrite_string (FileHandle, TempString)  </l>
 <l>endfor</l>
