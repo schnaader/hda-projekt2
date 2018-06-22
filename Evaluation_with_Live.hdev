@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.1" halcon_version="13.0.1.1">
+<hdevelop file_version="1.1" halcon_version="17.12">
 <procedure name="main">
 <interface/>
 <body>
@@ -39,7 +39,7 @@
 <l>spacing_x:=30</l>
 <l>spacing_y:=30</l>
 <c></c>
-<l>Live:=0</l>
+<l>Live:=1</l>
 <c></c>
 <l>n:=1.5100</l>
 <c></c>
@@ -54,7 +54,7 @@
 <l>for Index := 1 to 5 by 1</l>
 <l>    dev_close_window ()   </l>
 <l>endfor</l>
-<l>write_image (ImageResult2, 'png', 0, '../hda-projekt2/Projekt 2/Dot_Image.png')</l>
+<l>write_image (ImageResult2, 'png', 0, '../hda-projekt2-master/Projekt 2/Dot_Image.png')</l>
 <c></c>
 <c></c>
 <l>dev_open_window_fit_size (0, 0, Width_Ref_Image, Height_Ref_Image, Width_Ref_Image, Height_Ref_Image, WindowHandle)</l>
@@ -72,6 +72,7 @@
 <l>if(Live)</l>
 <l>    grab_image(ImageRef, AcqHandle) </l>
 <l>    rotate_image (ImageRef, ImageRef, 180, 'constant')</l>
+<l>    rgb1_to_gray (ImageRef, ImageRef)</l>
 <l>else</l>
 <l>    read_image (ImageRef, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Projekt 2/hda-projekt2_Bildersession_2/005_18_50_Ohne_Oberflaeche.png')</l>
 <l>rgb1_to_gray (ImageRef, ImageRef)</l>
@@ -142,10 +143,12 @@
 <l>count_obj (RegionAffineTrans, Number1)</l>
 <c></c>
 <l>segment_dots (ImageRef, RegionAffineTrans, rowref, columnref)</l>
-<c></c>
+<l>stop()</l>
 <l>while(1)</l>
 <l>    if(Live)</l>
-<l>        grab_image(ImageChanged, AcqHandle)        </l>
+<l>        grab_image(ImageChanged, AcqHandle) </l>
+<l>        rgb1_to_gray (ImageChanged, ImageChanged)</l>
+<l>        rotate_image (ImageChanged, ImageChanged, 180, 'constant')</l>
 <l>    else</l>
 <l>        read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Projekt 2/hda-projekt2_Bildersession_2/008_18_50_45Grad_Oberflaeche_von_vorher.png')</l>
 <l>    rgb1_to_gray (ImageChanged, ImageChanged)</l>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.1" halcon_version="13.0.1.1">
+<hdevelop file_version="1.1" halcon_version="17.12">
 <procedure name="segment_dots">
 <interface>
 <io>
@@ -13,16 +13,21 @@
 </interface>
 <body>
 <c></c>
-<l>median_image (image_in, ImageMedian, 'circle', 10, 'mirrored')</l>
-<l>dyn_threshold (image_in, ImageMedian, RegionDynThresh, 35, 'dark')</l>
+<l>*median_image (image_in, ImageMedian, 'circle', 10, 'mirrored')</l>
+<l>mean_image (image_in, ImageMean, 50, 50)</l>
+<l>dyn_threshold (image_in, ImageMean, RegionDynThresh, 50, 'dark')</l>
 <l>opening_circle (RegionDynThresh, RegionOpening, 3)</l>
-<l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
+<l>closing_circle (RegionOpening, RegionClosing, 5.5)</l>
+<l>connection (RegionClosing, ConnectedRegions1)</l>
+<l>select_shape (ConnectedRegions1, SelectedRegions, ['area','circularity'], 'and', [0,0.78561], [6022.73,1])</l>
 <c></c>
-<l>smallest_rectangle2 (RegionClosing, Row, Column, Phi, Length1, Length2)</l>
+<c></c>
+<l>union1 (SelectedRegions, SelectedRegions)</l>
+<l>smallest_rectangle2 (SelectedRegions, Row, Column, Phi, Length1, Length2)</l>
 <l>gen_rectangle2 (Rectangle, Row, Column, Phi, Length1, Length2)</l>
 <l>dilation_circle (Rectangle, RegionDilation, 3.5)</l>
 <c></c>
-<l>connection (RegionClosing, ConnectedRegions)</l>
+<l>connection (SelectedRegions, ConnectedRegions)</l>
 <l>count_obj (RegionIntersection, Number)</l>
 <l>row_out:=[]</l>
 <l>column_out:=[]</l>
