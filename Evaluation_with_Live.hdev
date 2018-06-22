@@ -41,6 +41,9 @@
 <c></c>
 <l>Live:=0</l>
 <c></c>
+<l>n:=1.5100</l>
+<c></c>
+<c></c>
 <c>*get Timestamp</c>
 <l>get_system_time (MSecond, Second, Minute, Hour, Day, YDay, Month, Year)</l>
 <l>Timestamp:=Year*10000000000000+Month*100000000000+Day*1000000000+Hour*10000000+Minute*100000+Second*1000+MSecond</l>
@@ -150,7 +153,7 @@
 <c>    </c>
 <c>    </c>
 <l>    segment_dots (ImageChanged, RegionAffineTrans, rowschanged, columchanged)</l>
-<l>    distance_pp (rowref, columnref, rowschanged, columchanged, Distance)</l>
+<l>    distance_pp (rowref, columnref, rowschanged, columchanged, Distanceall)</l>
 <c>    </c>
 <c>    </c>
 <l>    tuple_find (rowref, 0.0, Indices1)</l>
@@ -161,7 +164,7 @@
 <l>    tuple_find (Indicesremove, -1, Indices5)</l>
 <l>    tuple_remove (Indicesremove, Indices5, Indicesremove)</l>
 <c>    </c>
-<l>    tuple_remove (Distance, Indicesremove, Distance) </l>
+<l>    tuple_remove (Distanceall, Indicesremove, Distance) </l>
 <c>    </c>
 <l>    tuple_remove (rowref, Indicesremove, rowsrefreduced) </l>
 <l>    tuple_remove (columnref, Indicesremove, columnrefreduced) </l>
@@ -180,6 +183,15 @@
 <c>    </c>
 <l>endwhile</l>
 <c>    </c>
+<c> </c>
+<l>   Alphax:=atan((rowref-rowschanged)/Distanceall)</l>
+<l>   Alphay:=atan((columnref-columchanged)/Distanceall)</l>
+<c>   </c>
+<l>   Anglex:=atan((sin(Alphax))/(n-cos(Alphax)))</l>
+<l>   Angley:=atan((sin(Alphay))/(n-cos(Alphay)))</l>
+<c></c>
+<c></c>
+<c></c>
 <l>if(Live)</l>
 <l>    close_framegrabber (AcqHandle) </l>
 <c>  </c>
@@ -188,11 +200,11 @@
 <c></c>
 <c>*CSV Data Output</c>
 <l>open_file ('/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Out_Data/'+Timestamp+'_Data.csv', 'output', FileHandle)</l>
-<l>FirstLine:=['Number',';','Row_Reference',';','Column_Reference',';','Row_Changed',';','Column_Changed']</l>
+<l>FirstLine:=['Number',';','Row_Reference',';','Column_Reference',';','Row_Changed',';','Column_Changed',';','Anglex',';','Angley']</l>
 <l>fwrite_string (FileHandle, FirstLine)</l>
 <c></c>
 <l>for Index1 := 0 to |rowref|-1 by 1</l>
-<l>    TempString:=[Index1,';',rowref[Index1],';',columnref[Index1],';',rowschanged[Index1],';',columchanged[Index1]]</l>
+<l>    TempString:=[Index1,';',rowref[Index1],';',columnref[Index1],';',rowschanged[Index1],';',columchanged[Index1],';',Anglex[Index1],';',Angley[Index1]]</l>
 <l>    fnew_line (FileHandle)</l>
 <l>    fwrite_string (FileHandle, TempString)  </l>
 <l>endfor</l>
