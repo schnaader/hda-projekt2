@@ -27,17 +27,17 @@
 <c></c>
 <c></c>
 <c></c>
-<l>Height_Ref_Image:=1800</l>
-<l>Width_Ref_Image:=2880</l>
+<l>Height_Ref_Image:=1000</l>
+<l>Width_Ref_Image:=1000</l>
 <l>Height_Ref_Image:=1000</l>
 <l>Width_Ref_Image:=1000</l>
 <c></c>
 <l>back_brightness:=255</l>
 <l>dot_brightness:=0</l>
 <c></c>
-<l>dot_Radius:=2.5</l>
-<l>spacing_x:=10</l>
-<l>spacing_y:=10</l>
+<l>dot_Radius:=10</l>
+<l>spacing_x:=30</l>
+<l>spacing_y:=30</l>
 <c></c>
 <l>Live:=0</l>
 <c></c>
@@ -68,37 +68,41 @@
 <c></c>
 <l>if(Live)</l>
 <l>    grab_image(ImageRef, AcqHandle) </l>
+<l>    rotate_image (ImageRef, ImageRef, 180, 'constant')</l>
 <l>else</l>
-<l>    read_image (ImageRef, '../hda-projekt2/Projekt 2/Ref/test.tiff')</l>
+<l>    read_image (ImageRef, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Projekt 2/hda-projekt2_Bildersession_2/005_18_50_Ohne_Oberflaeche.png')</l>
+<l>rgb1_to_gray (ImageRef, ImageRef)</l>
 <l>endif</l>
 <l>dev_display (ImageRef)</l>
 <c></c>
 <c></c>
 <c></c>
-<l>dev_display (ImageRef)</l>
 <c></c>
-<c></c>
-<l>median_image (ImageRef, ImageMedian, 'circle', 10, 'mirrored')</l>
-<l>dyn_threshold (ImageRef, ImageMedian, RegionDynThresh, 40, 'dark')</l>
-<l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
-<l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
+<l>mean_image (ImageRef, ImageMedian, 50, 50)</l>
+<l>dyn_threshold (ImageRef, ImageMedian, RegionDynThresh, 30, 'dark')</l>
+<l>opening_circle (RegionDynThresh, RegionOpening, 10)</l>
+<l>closing_circle (RegionOpening, RegionClosing, 10)</l>
 <l>connection (RegionClosing, ConnectedRegions1)</l>
-<l>select_shape (ConnectedRegions1, SelectedRegions, 'area', 'and', 42.585, 100)</l>
+<l>select_shape (ConnectedRegions1, SelectedRegions, 'area', 'and', 1400.585, 2000)</l>
 <l>union1 (SelectedRegions, RegionUnion)</l>
-<l>smallest_rectangle2 (RegionUnion, Row, Column, Phi, Length1, Length2)</l>
-<l>gen_rectangle2 (Rectangle2, Row, Column, Phi, Length1, Length2)</l>
+<l>smallest_rectangle2 (RegionUnion, Rowin, Columnin, Phi, Length1, Length2)</l>
+<l>gen_rectangle2 (Rectangle2, Rowin, Columnin, Phi, Length1, Length2)</l>
 <c></c>
+<c></c>
+<c></c>
+<c>**************First rotation </c>
 <l>hom_mat2d_identity (HomMat2DIdentity)</l>
-<l>hom_mat2d_rotate (HomMat2DIdentity, 3.1415*1/2-Phi,  Row,Column, HomMat2DRotate)</l>
+<l>hom_mat2d_rotate (HomMat2DIdentity, 3.1415*4/2-Phi,  Rowin ,Columnin, HomMat2DRotate)</l>
 <l>affine_trans_image (ImageRef, ImageRotate, HomMat2DRotate, 'nearest_neighbor', 'false')</l>
+<c>**************************************</c>
 <c></c>
 <c></c>
-<l>median_image (ImageRotate, ImageMedian, 'circle', 10, 'mirrored')</l>
+<l>mean_image (ImageRotate, ImageMedian, 50, 50)</l>
 <l>dyn_threshold (ImageRotate, ImageMedian, RegionDynThresh, 35, 'dark')</l>
-<l>opening_circle (RegionDynThresh, RegionOpening, 3.5)</l>
-<l>closing_circle (RegionOpening, RegionClosing, 15.5)</l>
+<l>opening_circle (RegionDynThresh, RegionOpening, 15)</l>
+<l>closing_circle (RegionOpening, RegionClosing, 10)</l>
 <l>connection (RegionClosing, ConnectedRegions1)</l>
-<l>select_shape (ConnectedRegions1, SelectedRegions, 'area', 'and', 42.585, 100)</l>
+<l>select_shape (ConnectedRegions1, SelectedRegions, 'area', 'and', 1200, 2000)</l>
 <l>count_obj (SelectedRegions, Number)</l>
 <l>Side_number:=int(sqrt(Number))</l>
 <l>union1 (SelectedRegions, RegionUnion)</l>
@@ -106,26 +110,32 @@
 <c></c>
 <l>gen_rectangle2 (Rectangle1, Row, Column, Phi, Length1+Length1/(Side_number-1), Length2+Length2/(Side_number-1))</l>
 <c></c>
-<l>gen_empty_obj (Regions)</l>
-<l>rowsref:=[]</l>
-<l>columsref:=[]</l>
-<l>rowschanged:=[]</l>
-<l>columchanged:=[]</l>
+<l>*gen_empty_obj (Regions)</l>
+<l>* rowsref:=[]</l>
+<l>* columsref:=[]</l>
+<l>* rowschanged:=[]</l>
+<l>* columchanged:=[]</l>
 <c></c>
-<l>for j := 0 to Side_number-1 by 1</l>
-<l>    for i := 0 to Side_number-1 by 1</l>
-<l>        clip_region (Rectangle1, RegionClipped, (Row-(Length1+Length1/(Side_number))+ (Length1*2/(Side_number-1))*(j)), Column-(Length2+Length2/(Side_number))+ ((Length2*2)/(Side_number-1))*(i), Row-(Length1+Length1/(Side_number)) + (Length1*2/(Side_number-1))*(j+1), Column-(Length2+Length2/(Side_number)) + ((Length2*2)/(Side_number-1))*(i+1))</l>
-<l>        intersection (RegionDynThresh, RegionClipped, RegionIntersection)</l>
-<l>        region_features (RegionIntersection, 'row', row_out)</l>
-<l>        region_features (RegionIntersection, 'column', column_out)</l>
-<l>        rowsref:=[rowsref,row_out]</l>
-<l>        columsref:=[columsref,column_out]</l>
-<l>        concat_obj (Regions, RegionClipped, Regions)</l>
-<l>    endfor</l>
-<l>endfor</l>
+<l>* for j := 0 to Side_number by 1</l>
+<l>*     for i := 0 to Side_number by 1</l>
+<c>        </c>
+<l>*         clip_region (Rectangle1, RegionClipped, (Row-(Length1+Length1/(Side_number))+ (Length1*2/(Side_number-1))*(j)), Column-(Length2+Length2/(Side_number))+ ((Length2*2)/(Side_number-1))*(i), Row-(Length1+Length1/(Side_number)) + (Length1*2/(Side_number-1))*(j+1), Column-(Length2+Length2/(Side_number)) + ((Length2*2)/(Side_number-1))*(i+1))</l>
+<l>*         intersection (RegionDynThresh, RegionClipped, RegionIntersection)</l>
+<l>*         region_features (RegionIntersection, 'row', row_out)</l>
+<l>*         region_features (RegionIntersection, 'column', column_out)</l>
+<l>*         rowsref:=[rowsref,row_out]</l>
+<l>*         columsref:=[columsref,column_out]</l>
+<l>*         concat_obj (Regions, RegionClipped, Regions)</l>
+<l>*     endfor</l>
+<l>* endfor</l>
+<l>region_features (SelectedRegions, 'row', RowGrid)</l>
+<l>region_features (SelectedRegions, 'column', ColumnGrid)</l>
+<l>gen_rectangle2 (Regions, RowGrid, ColumnGrid,gen_tuple_const(|RowGrid|, 0), gen_tuple_const(|RowGrid|, Length1/Side_number), gen_tuple_const(|RowGrid|, Length2/Side_number))</l>
 <c></c>
-<l>hom_mat2d_rotate (HomMat2DRotate, -(3.1415*1/2-Phi), Column, Row, HomMat2DRotate1)</l>
-<l>affine_trans_region (Regions, RegionAffineTrans, HomMat2DRotate1, 'nearest_neighbor')</l>
+<c></c>
+<l>hom_mat2d_invert (HomMat2DRotate, HomMat2DInvert)</l>
+<l>*hom_mat2d_rotate (HomMat2DRotate, -3.1415*4/2-Phi, Rowin, Columnin, HomMat2DRotate1)</l>
+<l>affine_trans_region (Regions, RegionAffineTrans, HomMat2DInvert, 'nearest_neighbor')</l>
 <l>count_obj (RegionAffineTrans, Number1)</l>
 <c></c>
 <l>segment_dots (ImageRef, RegionAffineTrans, rowref, columnref)</l>
@@ -134,7 +144,8 @@
 <l>    if(Live)</l>
 <l>        grab_image(ImageChanged, AcqHandle)        </l>
 <l>    else</l>
-<l>        read_image (ImageChanged, '../hda-projekt2/Projekt 2/Test2 ID002/test32.tiff')</l>
+<l>        read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Projekt 2/hda-projekt2_Bildersession_2/008_18_50_45Grad_Oberflaeche_von_vorher.png')</l>
+<l>    rgb1_to_gray (ImageChanged, ImageChanged)</l>
 <l>    endif</l>
 <c>    </c>
 <c>    </c>
@@ -142,7 +153,7 @@
 <l>    distance_pp (rowref, columnref, rowschanged, columchanged, Distance)</l>
 <c>    </c>
 <c>    </c>
-<l>    tuple_find (rowsref, 0.0, Indices1)</l>
+<l>    tuple_find (rowref, 0.0, Indices1)</l>
 <l>    tuple_find (columnref, 0.0, Indices2)</l>
 <l>    tuple_find (rowschanged, 0.0, Indices3)</l>
 <l>    tuple_find (columchanged, 0.0, Indices4)</l>
@@ -152,7 +163,7 @@
 <c>    </c>
 <l>    tuple_remove (Distance, Indicesremove, Distance) </l>
 <c>    </c>
-<l>    tuple_remove (rowsref, Indicesremove, rowsrefreduced) </l>
+<l>    tuple_remove (rowref, Indicesremove, rowsrefreduced) </l>
 <l>    tuple_remove (columnref, Indicesremove, columnrefreduced) </l>
 <c>    </c>
 <l>    tuple_remove (columchanged, Indicesremove, columchangedreduced) </l>
@@ -180,8 +191,8 @@
 <l>FirstLine:=['Number',';','Row_Reference',';','Column_Reference',';','Row_Changed',';','Column_Changed']</l>
 <l>fwrite_string (FileHandle, FirstLine)</l>
 <c></c>
-<l>for Index1 := 0 to |rowsref|-1 by 1</l>
-<l>    TempString:=[Index1,';',rowsref[Index1],';',columsref[Index1],';',rowschanged[Index1],';',columchanged[Index1]]</l>
+<l>for Index1 := 0 to |rowref|-1 by 1</l>
+<l>    TempString:=[Index1,';',rowref[Index1],';',columnref[Index1],';',rowschanged[Index1],';',columchanged[Index1]]</l>
 <l>    fnew_line (FileHandle)</l>
 <l>    fwrite_string (FileHandle, TempString)  </l>
 <l>endfor</l>
