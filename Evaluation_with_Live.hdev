@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.1" halcon_version="17.12">
+<hdevelop file_version="1.1" halcon_version="13.0.1.1">
 <procedure name="main">
 <interface/>
 <body>
@@ -39,7 +39,8 @@
 <l>spacing_x:=30</l>
 <l>spacing_y:=30</l>
 <c></c>
-<l>Live:=1</l>
+<c>*Set Live to 0 for debugging or Later data Analysis</c>
+<l>Live:=0</l>
 <c></c>
 <l>n:=1.5100</l>
 <c></c>
@@ -51,12 +52,14 @@
 <c></c>
 <c>*generating a dot matrix</c>
 <l>dot_gen (ResultImages, ImageResult2, Width_Ref_Image, Height_Ref_Image, back_brightness, spacing_x, spacing_y, dot_Radius, dot_brightness)</l>
+<c>*Closing all active windows</c>
 <l>for Index := 1 to 5 by 1</l>
 <l>    dev_close_window ()   </l>
 <l>endfor</l>
+<c>*writing dot image to file</c>
 <l>write_image (ImageResult2, 'png', 0, '../hda-projekt2-master/Projekt 2/Dot_Image.png')</l>
 <c></c>
-<c></c>
+<c>*Openimg windws</c>
 <l>dev_open_window_fit_size (0, 0, Width_Ref_Image, Height_Ref_Image, Width_Ref_Image, Height_Ref_Image, WindowHandle)</l>
 <l>dev_open_window_fit_size (0, 600, Width_Ref_Image, Height_Ref_Image, -1, -1, WindowHandle2)</l>
 <l>dev_set_window (WindowHandle)</l>
@@ -68,20 +71,20 @@
 <l>endif</l>
 <c></c>
 <l>dev_set_window (WindowHandle2)</l>
-<c></c>
+<c>*Image Aquisition</c>
 <l>if(Live)</l>
 <l>    grab_image(ImageRef, AcqHandle) </l>
 <l>    rotate_image (ImageRef, ImageRef, 180, 'constant')</l>
 <l>    rgb1_to_gray (ImageRef, ImageRef)</l>
 <l>else</l>
 <l>    read_image (ImageRef, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Projekt 2/hda-projekt2_Bildersession_2/005_18_50_Ohne_Oberflaeche.png')</l>
-<l>rgb1_to_gray (ImageRef, ImageRef)</l>
+<l>    rgb1_to_gray (ImageRef, ImageRef)</l>
 <l>endif</l>
 <l>dev_display (ImageRef)</l>
 <c></c>
 <c></c>
 <c></c>
-<c></c>
+<c>*Segmentation of Dot matrix in Ref Image to determine rotation angle</c>
 <l>mean_image (ImageRef, ImageMedian, 50, 50)</l>
 <l>dyn_threshold (ImageRef, ImageMedian, RegionDynThresh, 30, 'dark')</l>
 <l>opening_circle (RegionDynThresh, RegionOpening, 10)</l>
@@ -89,6 +92,7 @@
 <l>connection (RegionClosing, ConnectedRegions1)</l>
 <l>select_shape (ConnectedRegions1, SelectedRegions, 'area', 'and', 1400.585, 2000)</l>
 <l>union1 (SelectedRegions, RegionUnion)</l>
+<c>*Fit of smalles rectangle around all segmented dots</c>
 <l>smallest_rectangle2 (RegionUnion, Rowin, Columnin, Phi, Length1, Length2)</l>
 <l>gen_rectangle2 (Rectangle2, Rowin, Columnin, Phi, Length1, Length2)</l>
 <c></c>
@@ -100,7 +104,7 @@
 <l>affine_trans_image (ImageRef, ImageRotate, HomMat2DRotate, 'nearest_neighbor', 'false')</l>
 <c>**************************************</c>
 <c></c>
-<c></c>
+<c>*Segmentation of all dots in rotated Ref image to determine their center points to define Rois for later use as reference to connect ref and mesured dot center points</c>
 <l>mean_image (ImageRotate, ImageMedian, 50, 50)</l>
 <l>dyn_threshold (ImageRotate, ImageMedian, RegionDynThresh, 35, 'dark')</l>
 <l>opening_circle (RegionDynThresh, RegionOpening, 15)</l>
