@@ -104,7 +104,9 @@
 <l>affine_trans_image (ImageRef, ImageRotate, HomMat2DRotate, 'nearest_neighbor', 'false')</l>
 <c>**************************************</c>
 <c></c>
-<c>*Segmentation of all dots in rotated Ref image to determine their center points to define Rois for later use as reference to connect ref and mesured dot center points</c>
+<c>*Segmentation of all dots in rotated Ref image to determine their center points to </c>
+<c>*define Rois for later use as reference to connect ref and mesured dot center </c>
+<c>*points</c>
 <l>mean_image (ImageRotate, ImageMedian, 50, 50)</l>
 <l>dyn_threshold (ImageRotate, ImageMedian, RegionDynThresh, 35, 'dark')</l>
 <l>opening_circle (RegionDynThresh, RegionOpening, 15)</l>
@@ -148,29 +150,35 @@
 <c></c>
 <l>segment_dots (ImageRef, RegionAffineTrans, rowref, columnref)</l>
 <l>stop()</l>
+<c></c>
+<c>**Main Loop</c>
 <l>while(1)</l>
+<c>    *Image aquisition</c>
 <l>    if(Live)</l>
 <l>        grab_image(ImageChanged, AcqHandle) </l>
 <l>        rgb1_to_gray (ImageChanged, ImageChanged)</l>
 <l>        rotate_image (ImageChanged, ImageChanged, 180, 'constant')</l>
 <l>    else</l>
 <l>        read_image (ImageChanged, '/Users/tobiasnixdorf/Documents/h-da/6 Semester/Project2/hda-projekt2/Projekt 2/hda-projekt2_Bildersession_2/008_18_50_45Grad_Oberflaeche_von_vorher.png')</l>
-<l>    rgb1_to_gray (ImageChanged, ImageChanged)</l>
+<l>        rgb1_to_gray (ImageChanged, ImageChanged)</l>
 <l>    endif</l>
 <c>    </c>
 <c>    </c>
 <l>    segment_dots (ImageChanged, RegionAffineTrans, rowschanged, columchanged)</l>
+<c>    *distance between ref dots and changed dots</c>
 <l>    distance_pp (rowref, columnref, rowschanged, columchanged, Distanceall)</l>
 <c>    </c>
-<c>    </c>
+<c>    *** Removing zeros</c>
 <l>    tuple_find (rowref, 0.0, Indices1)</l>
 <l>    tuple_find (columnref, 0.0, Indices2)</l>
 <l>    tuple_find (rowschanged, 0.0, Indices3)</l>
 <l>    tuple_find (columchanged, 0.0, Indices4)</l>
 <l>    Indicesremove:=[Indices1,Indices2,Indices3,Indices4]</l>
+<c>    *removing -1 values produced by tuple_find</c>
 <l>    tuple_find (Indicesremove, -1, Indices5)</l>
 <l>    tuple_remove (Indicesremove, Indices5, Indicesremove)</l>
 <c>    </c>
+<c>    *Now removing all dots that have not been found in ref or changed Image</c>
 <l>    tuple_remove (Distanceall, Indicesremove, Distance) </l>
 <c>    </c>
 <l>    tuple_remove (rowref, Indicesremove, rowsrefreduced) </l>
