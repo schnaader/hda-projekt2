@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.1" halcon_version="17.12">
+<hdevelop file_version="1.1" halcon_version="13.0.1.1">
 <procedure name="segment_dots">
 <interface>
 <io>
@@ -12,13 +12,37 @@
 </oc>
 </interface>
 <body>
+<c>* MIT License</c>
 <c></c>
+<c>* Copyright (c) 2018 Tobias Nixdorf</c>
+<c></c>
+<c>* Permission is hereby granted, free of charge, to any person obtaining a copy</c>
+<c>* of this software and associated documentation files (the "Software"), to deal</c>
+<c>* in the Software without restriction, including without limitation the rights</c>
+<c>* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</c>
+<c>* copies of the Software, and to permit persons to whom the Software is</c>
+<c>* furnished to do so, subject to the following conditions:</c>
+<c></c>
+<c>* The above copyright notice and this permission notice shall be included in all</c>
+<c>* copies or substantial portions of the Software.</c>
+<c></c>
+<c>* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</c>
+<c>* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</c>
+<c>* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</c>
+<c>* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</c>
+<c>* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</c>
+<c>* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</c>
+<c>* SOFTWARE.</c>
+<c></c>
+<c></c>
+<c>*Segmentation of Dot regions</c>
 <l>*median_image (image_in, ImageMedian, 'circle', 10, 'mirrored')</l>
 <l>mean_image (image_in, ImageMean, 50, 50)</l>
 <l>dyn_threshold (image_in, ImageMean, RegionDynThresh, 50, 'dark')</l>
 <l>opening_circle (RegionDynThresh, RegionOpening, 3)</l>
 <l>closing_circle (RegionOpening, RegionClosing, 5.5)</l>
 <l>connection (RegionClosing, ConnectedRegions1)</l>
+<c>*remove areas that are the wrong size or shape</c>
 <l>select_shape (ConnectedRegions1, SelectedRegions, ['area','circularity'], 'and', [0,0.78561], [6022.73,1])</l>
 <c></c>
 <c></c>
@@ -32,17 +56,23 @@
 <l>row_out:=[]</l>
 <l>column_out:=[]</l>
 <c></c>
+<c>*Loop over every point to determine its center points</c>
 <l>for Index := 1 to Number by 1</l>
 <l>  select_obj (RegionIntersection, ObjectSelected, Index)</l>
 <l>intersection (ObjectSelected,ConnectedRegions, regiontemp)</l>
-<l>region_features (regiontemp, 'row', row_temp)</l>
-<l>region_features (regiontemp, 'column', column_temp)  </l>
+<c>*center point is determined only based on the region</c>
+<l>area_center (regiontemp, Area, row_temp, column_temp)</l>
+<c>*center points is determined based on region and image gray values</c>
+<l>* area_center_gray (regiontemp, image_in, Area1, row_temp, column_temp)</l>
+<c> </c>
+<c>*if no point is found tuple is filled wwith dummy value ''</c>
 <l>if(|row_temp|&lt;1)</l>
 <l>  row_temp:=''  </l>
 <l>endif</l>
 <l>if(|column_temp|&lt;1)</l>
 <l>  column_temp:=''  </l>
 <l>endif</l>
+<c>*new values are added to tuple</c>
 <l>row_out:=[row_out,row_temp]</l>
 <l>column_out:=[column_out,column_temp]</l>
 <l>endfor</l>
