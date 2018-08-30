@@ -1,5 +1,5 @@
 clear;
-% CSV-Datei (wird vom Halcon-Skript erstellt)
+% Pfad und Dateiname der CSV-Datei (wird vom Halcon-Skript erstellt)
 filename = 'Gebogen.csv';
 % Aus der CSV werden die Positionen der Referenzpunkte sowie deren
 % Verschiebung (jeweils in Pixeln) extrahiert
@@ -9,7 +9,8 @@ filename = 'Gebogen.csv';
  % statt Daten aus der CSV einzulesen
  %
  % count = 33;
- % noise = 10000;
+ % noise = 10000; % Kann genutzt werden, um den Werten künstliches Rauschen
+ % hinzuzufügen
  % for n = (1:count)    
  %    for m = (1:count)
  %        b = (n-1)*count+m;
@@ -22,16 +23,18 @@ filename = 'Gebogen.csv';
  %    end
  % end
 
-RowChanged = RowChanged - Row;
-ColumnChanged = ColumnChanged - Column;
-
+% Diese Werte müssen gegebenenfalls an die Gegebenheiten des jeweiligen
+% Aufbaus angepasst werden
 Objektschnittweite = 710 / 1000; % in m
 Brennweite = 16 / 1000; % in m
-n = 1.51;
+n = 1.51; % Brechwert des Materials
 d = 0.85/1000; % Dicke der Oberfläche, in m
 Bildhoehe = 2748;
 Bildbreite = 3840;
 pixelGroesse = 1.67 * 10^-6; % in m, Seitenlänge eines Pixels
+
+RowChanged = RowChanged - Row;
+ColumnChanged = ColumnChanged - Column;
 
 % Die Referenzpunkte können in der CSV in beliebiger Reihenfolge vorliegen,
 % für den weiteren Ablauf hier ist es aber notwendig, sie zu sortieren
@@ -65,19 +68,19 @@ for i=1:count
     end
 end
 
-columnChangedReal = pixelGroesse * ColumnChanged;
-rowChangedReal = pixelGroesse * RowChanged;
+% Abstand der Punkte in Meter statt Pixel, durch den Abbildungsmaßstab von
+% Bildkoordinaten in Objektkoordinaten
+ObjektDiffX = (pixelGroesse * ColumnChanged) ./ beta;
+ObjektDiffY = (pixelGroesse * RowChanged) ./ beta;
 
-ObjektDiffX = columnChangedReal./beta;
-ObjektDiffY = rowChangedReal./beta;
-
+% Verkippungswinkel in X- sowie Y-Richtung
 gammaX = ObjektDiffX./sqrt((ObjektDiffX/Objektschnittweite).^2 + 1);
 gammaX = gammaX * n / (d * (n-1)) - xAlpha;
 
 gammaY = ObjektDiffY./sqrt((ObjektDiffY./Objektschnittweite).^2 + 1);
 gammaY = gammaY * n / (d * (n-1)) - yAlpha;
 
-% Steigungsmatrizen erstellen
+% Matrix mit den aus den Winkeln erhaltenen Steigungen erstellen
 sqrtCount = sqrt(count);
 Row_Mat = zeros(sqrtCount,sqrtCount);
 Column_Mat = zeros(sqrtCount,sqrtCount);
@@ -89,13 +92,16 @@ for n = 1:sqrtCount
         Row_Mat(n,m) = centeredY(b);
         Column_Mat(n,m) = centeredX(b);        
         if valid(b) ~= 0            
+            % Ermitteln der Steigung (Länge der Gegenkathete eines Dreiecks mit Winkel
+            % Gamma)
             xGradient_Mat(n,m) = atan(gammaY(b));
             yGradient_Mat(n,m) = atan(gammaX(b));
         end
     end
 end
 
-% Matrizen erstellen, die den Abstand der Punkte untereinander beinhalten
+% Abstandsmatrizen erstellen, die die Abstände der Punkte zu ihren Nachbarn
+% in Pixeln beinhalten
 deltaRow_Mat = zeros(sqrtCount,sqrtCount);
 deltaColumn_Mat = zeros(sqrtCount,sqrtCount);
 for n = 1 : sqrtCount
